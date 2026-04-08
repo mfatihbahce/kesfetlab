@@ -10,9 +10,11 @@
         <div class="kpi-card">
             <div class="kpi-head">
                 <div class="kpi-icon"><i class="fas fa-user-graduate"></i></div>
+                <span class="kpi-chip">GENEL</span>
             </div>
             <div class="kpi-value">{{ $stats['total_students'] }}</div>
-            <div class="kpi-label">Toplam Ogrenci</div>
+            <div class="kpi-label">Toplam Öğrenci</div>
+            <div class="kpi-foot"><i class="fas fa-wave-square"></i> Tüm kayıtlar</div>
         </div>
     </div>
     
@@ -20,9 +22,11 @@
         <div class="kpi-card">
             <div class="kpi-head">
                 <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+                <span class="kpi-chip">AKTİF</span>
             </div>
             <div class="kpi-value">{{ $stats['pending_students'] }}</div>
-            <div class="kpi-label">Bekleyen Kayit</div>
+            <div class="kpi-label">Bekleyen Kayıt</div>
+            <div class="kpi-foot"><i class="fas fa-hourglass-half"></i> Onay sürecinde</div>
         </div>
     </div>
     
@@ -30,9 +34,11 @@
         <div class="kpi-card">
             <div class="kpi-head">
                 <div class="kpi-icon"><i class="fas fa-flask"></i></div>
+                <span class="kpi-chip">EĞİTİM</span>
             </div>
             <div class="kpi-value">{{ $stats['active_workshops'] }}</div>
-            <div class="kpi-label">Aktif Atolye</div>
+            <div class="kpi-label">Aktif Atölye</div>
+            <div class="kpi-foot"><i class="fas fa-bolt"></i> Yayında olan içerik</div>
         </div>
     </div>
     
@@ -40,9 +46,11 @@
         <div class="kpi-card">
             <div class="kpi-head">
                 <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                <span class="kpi-chip">SINIF</span>
             </div>
             <div class="kpi-value">{{ $stats['active_groups'] }}</div>
             <div class="kpi-label">Aktif Grup</div>
+            <div class="kpi-foot"><i class="fas fa-layer-group"></i> Planlanan ders grubu</div>
         </div>
     </div>
 </div>
