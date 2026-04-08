@@ -37,29 +37,13 @@
             background: linear-gradient(120deg, var(--brand-orange), var(--brand-yellow));
             color: #1f2937;
             text-align: center;
-            padding: 30px 20px 24px;
-        }
-        .logo-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 18px;
-            border-radius: 18px;
-            background: rgba(255,255,255,.22);
-            border: 1px solid rgba(255,255,255,.55);
-            box-shadow:
-                0 8px 22px rgba(255,255,255,.22),
-                inset 0 1px 0 rgba(255,255,255,.58);
-            margin-bottom: 8px;
+            padding: 26px 20px;
         }
         .brand-logo {
-            max-width: 340px;
-            max-height: 118px;
+            max-width: 280px;
+            max-height: 96px;
             object-fit: contain;
-            margin: 0;
-            filter:
-                drop-shadow(0 0 6px rgba(255,255,255,.75))
-                drop-shadow(0 2px 5px rgba(0,0,0,.18));
+            margin-bottom: 8px;
         }
         .form-hero h1 {
             margin: 4px 0 2px;
@@ -138,9 +122,7 @@
         <div class="form-shell">
             <div class="form-hero">
                 @if(!empty($brandLogoPath))
-                    <div class="logo-badge">
-                        <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="brand-logo">
-                    </div>
+                    <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="brand-logo">
                 @else
                     <h1>{{ $brandName ?? 'Kesfet LAB' }}</h1>
                 @endif
