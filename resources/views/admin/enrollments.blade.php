@@ -60,7 +60,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 25%;">Öğrenci</th>
-                                <th style="width: 25%;">Atölye & Grup</th>
+                                <th style="width: 25%;">Sınıf & Grup</th>
                                 <th style="width: 10%;">Kayıt Durumu</th>
                                 <th style="width: 10%;">Ödeme Durumu</th>
                                 <th style="width: 10%;">Tutar</th>
@@ -227,7 +227,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <strong>Atölye:</strong> {{ $enrollment->workshop->name }}
+                    <strong>Sınıf:</strong> {{ $enrollment->workshop->name }}
                 </div>
                 
                 <form id="assignGroupForm{{ $enrollment->id }}">
@@ -247,7 +247,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        <div class="form-text">Sadece aynı atölyedeki gruplar gösterilmektedir.</div>
+                        <div class="form-text">Sadece aynı sınıfdeki gruplar gösterilmektedir.</div>
                     </div>
                 </form>
             </div>
@@ -286,10 +286,10 @@
                     </div>
                     <div class="col-md-6">
                         <h6 class="border-bottom pb-2">
-                            <i class="fas fa-flask me-2"></i>Atölye Bilgileri
+                            <i class="fas fa-flask me-2"></i>Sınıf Bilgileri
                         </h6>
                         <table class="table table-sm">
-                            <tr><td><strong>Atölye:</strong></td><td>{{ $enrollment->workshop->name }}</td></tr>
+                            <tr><td><strong>Sınıf:</strong></td><td>{{ $enrollment->workshop->name }}</td></tr>
                             @if($enrollment->group)
                             <tr><td><strong>Grup:</strong></td><td>{{ $enrollment->group->name }}</td></tr>
                             <tr><td><strong>Eğitmen:</strong></td><td>{{ $enrollment->group->instructor->name ?? 'Atanmamış' }}</td></tr>

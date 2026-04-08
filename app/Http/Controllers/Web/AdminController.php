@@ -85,7 +85,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Atölye yönetimi sayfası
+     * Sınıf yönetimi sayfası
      */
     public function workshops()
     {
@@ -353,7 +353,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Yeni atölye oluştur
+     * Yeni sınıf oluştur
      */
     public function storeWorkshop(Request $request)
     {
@@ -368,11 +368,11 @@ class AdminController extends Controller
         Workshop::create($request->all());
 
         return redirect()->route('admin.workshops')
-                        ->with('success', 'Atölye başarıyla oluşturuldu.');
+                        ->with('success', 'Sınıf başarıyla oluşturuldu.');
     }
 
     /**
-     * Atölye güncelle
+     * Sınıf güncelle
      */
     public function updateWorkshop(Request $request, $id)
     {
@@ -388,21 +388,21 @@ class AdminController extends Controller
         $workshop->update($request->all());
 
         return redirect()->route('admin.workshops')
-                        ->with('success', 'Atölye başarıyla güncellendi.');
+                        ->with('success', 'Sınıf başarıyla güncellendi.');
     }
 
     /**
-     * Atölye sil
+     * Sınıf sil
      */
     public function deleteWorkshop($id)
     {
         $workshop = Workshop::findOrFail($id);
         
-        // Eğer atölyeye kayıt varsa silmeyi engelle
+        // Eğer sınıfa kayıt varsa silmeyi engelle
         if ($workshop->enrollments()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bu atölyeye kayıtlı öğrenciler bulunduğu için silinemez.'
+                'message' => 'Bu sınıfa kayıtlı öğrenciler bulunduğu için silinemez.'
             ]);
         }
 
@@ -410,7 +410,7 @@ class AdminController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Atölye başarıyla silindi.'
+            'message' => 'Sınıf başarıyla silindi.'
         ]);
     }
 

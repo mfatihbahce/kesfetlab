@@ -36,7 +36,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
         Route::put('/students/{id}/status', [AdminController::class, 'updateStudentStatus'])->name('admin.students.status');
         
-        // Atölye yönetimi
+        // Sınıf yönetimi
         Route::get('/workshops', [AdminController::class, 'workshops'])->name('admin.workshops');
         Route::post('/workshops', [AdminController::class, 'storeWorkshop'])->name('admin.workshops.store');
         Route::put('/workshops/{id}', [AdminController::class, 'updateWorkshop'])->name('admin.workshops.update');

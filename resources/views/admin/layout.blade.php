@@ -344,7 +344,7 @@
             <div class="nav-item">
                 <a href="{{ route('admin.workshops') }}" class="nav-link {{ request()->routeIs('admin.workshops') ? 'active' : '' }}">
                     <i class="fas fa-flask"></i>
-                    Atölyeler
+                    Sınıflar
                 </a>
             </div>
             

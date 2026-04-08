@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('workshops', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Atölye adı
+            $table->string('name'); // Sınıf adı
             $table->text('description')->nullable(); // Açıklama
             $table->integer('capacity')->default(20); // Kontenjan
             $table->decimal('price', 10, 2)->default(0); // Fiyat

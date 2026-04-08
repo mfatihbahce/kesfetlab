@@ -241,7 +241,7 @@
                                                     <tr><td><strong>Durum:</strong></td><td>{{ $student->registration_status_text }}</td></tr>
                                                     @if($student->enrollments->count() > 0)
                                                     <tr>
-                                                        <td><strong>Secilen Atolyeler:</strong></td>
+                                                        <td><strong>Secilen Sınıflar:</strong></td>
                                                         <td>
                                                             @foreach($student->enrollments as $enrollment)
                                                                 @if($enrollment->workshop)
@@ -251,7 +251,7 @@
                                                         </td>
                                                     </tr>
                                                     @else
-                                                    <tr><td><strong>Secilen Atolyeler:</strong></td><td><span class="text-muted">Henuz atölye secilmemis</span></td></tr>
+                                                    <tr><td><strong>Secilen Sınıflar:</strong></td><td><span class="text-muted">Henuz sınıf secilmemis</span></td></tr>
                                                     @endif
                                                     @if($student->notes)
                                                     <tr><td><strong>Notlar:</strong></td><td>{{ $student->notes }}</td></tr>

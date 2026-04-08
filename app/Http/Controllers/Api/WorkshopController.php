@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Validator;
 class WorkshopController extends Controller
 {
     /**
-     * Aktif atölyeleri listele (online form için)
+     * Aktif sınıfları listele (online form için)
      */
     public function index(Request $request): JsonResponse
     {
         $query = Workshop::query();
 
-        // Sadece aktif atölyeleri getir
+        // Sadece aktif sınıfları getir
         if ($request->has('active_only') && $request->active_only) {
             $query->active();
         }
@@ -35,7 +35,7 @@ class WorkshopController extends Controller
     }
 
     /**
-     * Atölye detayı
+     * Sınıf detayı
      */
     public function show($id): JsonResponse
     {
@@ -45,7 +45,7 @@ class WorkshopController extends Controller
         if (!$workshop) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye bulunamadı'
+                'message' => 'Sınıf bulunamadı'
             ], 404);
         }
 
@@ -56,7 +56,7 @@ class WorkshopController extends Controller
     }
 
     /**
-     * Yeni atölye oluştur (yönetici paneli için)
+     * Yeni sınıf oluştur (yönetici paneli için)
      */
     public function store(Request $request): JsonResponse
     {
@@ -81,21 +81,21 @@ class WorkshopController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Atölye başarıyla oluşturuldu',
+                'message' => 'Sınıf başarıyla oluşturuldu',
                 'data' => $workshop
             ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye oluşturulurken bir hata oluştu',
+                'message' => 'Sınıf oluşturulurken bir hata oluştu',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * Atölye güncelle (yönetici paneli için)
+     * Sınıf güncelle (yönetici paneli için)
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -120,7 +120,7 @@ class WorkshopController extends Controller
         if (!$workshop) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye bulunamadı'
+                'message' => 'Sınıf bulunamadı'
             ], 404);
         }
 
@@ -129,21 +129,21 @@ class WorkshopController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Atölye başarıyla güncellendi',
+                'message' => 'Sınıf başarıyla güncellendi',
                 'data' => $workshop
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye güncellenirken bir hata oluştu',
+                'message' => 'Sınıf güncellenirken bir hata oluştu',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * Atölye sil (yönetici paneli için)
+     * Sınıf sil (yönetici paneli için)
      */
     public function destroy($id): JsonResponse
     {
@@ -152,15 +152,15 @@ class WorkshopController extends Controller
         if (!$workshop) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye bulunamadı'
+                'message' => 'Sınıf bulunamadı'
             ], 404);
         }
 
-        // Atölyeye kayıtlı öğrenci var mı kontrol et
+        // Sınıfye kayıtlı öğrenci var mı kontrol et
         if ($workshop->enrollments()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bu atölyeye kayıtlı öğrenciler bulunduğu için silinemez'
+                'message' => 'Bu sınıfa kayıtlı öğrenciler bulunduğu için silinemez'
             ], 400);
         }
 
@@ -169,20 +169,20 @@ class WorkshopController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Atölye başarıyla silindi'
+                'message' => 'Sınıf başarıyla silindi'
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye silinirken bir hata oluştu',
+                'message' => 'Sınıf silinirken bir hata oluştu',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * Atölye istatistikleri (yönetici paneli için)
+     * Sınıf istatistikleri (yönetici paneli için)
      */
     public function statistics($id): JsonResponse
     {
@@ -192,7 +192,7 @@ class WorkshopController extends Controller
         if (!$workshop) {
             return response()->json([
                 'success' => false,
-                'message' => 'Atölye bulunamadı'
+                'message' => 'Sınıf bulunamadı'
             ], 404);
         }
 

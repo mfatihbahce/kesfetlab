@@ -63,7 +63,7 @@ class FormController extends Controller
             // Öğrenci kaydını oluştur
             $student = Student::create($studentData);
 
-            // Birden fazla atölye secimi icin enrollment kayitlari olustur
+            // Birden fazla sınıf secimi icin enrollment kayitlari olustur
             $workshops = Workshop::whereIn('id', $request->workshop_ids)->get();
 
             foreach ($workshops as $workshop) {

@@ -43,7 +43,7 @@
 			
 			<div class="p-3">
 				<div class="mb-3">
-					<strong>Atölye:</strong> {{ $group->workshop->name }}
+					<strong>Sınıf:</strong> {{ $group->workshop->name }}
 				</div>
 				
 				<div class="mb-3">
@@ -142,7 +142,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label for="workshop_id{{ $group->id }}" class="form-label">Atölye</label>
+									<label for="workshop_id{{ $group->id }}" class="form-label">Sınıf</label>
 									<select class="form-select" id="workshop_id{{ $group->id }}" name="workshop_id" required>
 										@foreach($workshops as $workshop)
 											<option value="{{ $workshop->id }}" {{ $group->workshop_id == $workshop->id ? 'selected' : '' }}>
@@ -330,9 +330,9 @@
 						</div>
 						<div class="col-md-6">
 							<div class="mb-3">
-								<label for="workshop_id" class="form-label">Atölye</label>
+								<label for="workshop_id" class="form-label">Sınıf</label>
 								<select class="form-select" id="workshop_id" name="workshop_id" required>
-									<option value="">Atölye Seçin</option>
+									<option value="">Sınıf Seçin</option>
 									@foreach($workshops as $workshop)
 										<option value="{{ $workshop->id }}">{{ $workshop->name }}</option>
 									@endforeach

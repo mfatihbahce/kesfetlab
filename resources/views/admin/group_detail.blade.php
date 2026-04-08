@@ -64,7 +64,7 @@
                 <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Grup Bilgileri</h5>
             </div>
             <div class="card-body">
-                <div class="mb-2"><strong>Atölye:</strong> {{ $group->workshop->name }}</div>
+                <div class="mb-2"><strong>Sınıf:</strong> {{ $group->workshop->name }}</div>
                 <div class="mb-2"><strong>Eğitmen:</strong> {{ optional($group->instructor)->name ?? 'Atanmamış' }}</div>
                 <div class="mb-2"><strong>Program:</strong> {{ $group->schedule }}</div>
                 <div class="mb-2"><strong>Kontenjan:</strong> {{ $group->capacity }}</div>

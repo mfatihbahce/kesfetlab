@@ -14,11 +14,11 @@ class EnrollmentSeeder extends Seeder
      */
     public function run(): void
     {
-        // Mevcut atölyeleri al
+        // Mevcut sınıfları al
         $workshops = Workshop::all();
         
         if ($workshops->isEmpty()) {
-            $this->command->info('Atölye bulunamadı. Önce WorkshopSeeder çalıştırın.');
+            $this->command->info('Sınıf bulunamadı. Önce WorkshopSeeder çalıştırın.');
             return;
         }
 
@@ -28,7 +28,7 @@ class EnrollmentSeeder extends Seeder
         $this->command->info("Enrollment'ı olmayan {$studentsWithoutEnrollment->count()} öğrenci bulundu.");
 
         foreach ($studentsWithoutEnrollment as $index => $student) {
-            // Atölye seç (sırayla)
+            // Sınıf seç (sırayla)
             $workshop = $workshops[$index % $workshops->count()];
             
             // Enrollment oluştur
@@ -44,7 +44,7 @@ class EnrollmentSeeder extends Seeder
                 'is_active' => true,
             ]);
             
-            $this->command->info("{$student->full_name} için {$workshop->name} atölyesi enrollment'ı oluşturuldu.");
+            $this->command->info("{$student->full_name} için {$workshop->name} sınıfı enrollment'ı oluşturuldu.");
         }
         
         $this->command->info('Enrollment seeder tamamlandı.');

@@ -25,7 +25,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Grup</th>
-                                <th>Atölye</th>
+                                <th>Sınıf</th>
                                 <th>Program</th>
                                 <th>Öğrenci</th>
                                 <th>Durum</th>

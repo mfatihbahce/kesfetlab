@@ -37,7 +37,7 @@
                 <span class="kpi-chip">EĞİTİM</span>
             </div>
             <div class="kpi-value">{{ $stats['active_workshops'] }}</div>
-            <div class="kpi-label">Aktif Atölye</div>
+            <div class="kpi-label">Aktif Sınıf</div>
             <div class="kpi-foot"><i class="fas fa-bolt"></i> Yayında olan içerik</div>
         </div>
     </div>
@@ -127,7 +127,7 @@
                     <thead>
                         <tr>
                             <th>Öğrenci</th>
-                            <th>Atölye</th>
+                            <th>Sınıf</th>
                             <th>Durum</th>
                             <th>Tarih</th>
                         </tr>
@@ -190,7 +190,7 @@
                     <div class="col-md-3 mb-3">
                         <a href="{{ route('admin.workshops') }}" class="btn btn-primary w-100">
                             <i class="fas fa-flask me-2"></i>
-                            Atölye Yönetimi
+                            Sınıf Yönetimi
                         </a>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -227,7 +227,7 @@
                             <li><i class="fas fa-circle text-primary me-2"></i>Toplam Öğrenci: {{ $stats['total_students'] }}</li>
                             <li><i class="fas fa-circle text-warning me-2"></i>Bekleyen Kayıt: {{ $stats['pending_students'] }}</li>
                             <li><i class="fas fa-circle text-success me-2"></i>Onaylanan Kayıt: {{ $stats['approved_students'] }}</li>
-                            <li><i class="fas fa-circle text-info me-2"></i>Toplam Atölye: {{ $stats['total_workshops'] }}</li>
+                            <li><i class="fas fa-circle text-info me-2"></i>Toplam Sınıf: {{ $stats['total_workshops'] }}</li>
                         </ul>
                     </div>
                     <div class="col-md-6">

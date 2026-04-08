@@ -29,7 +29,7 @@ Route::prefix('public')->group(function () {
     // Öğrenci kayıt formu
     Route::post('/students', [StudentController::class, 'store']);
     
-    // Aktif atölyeleri listele
+    // Aktif sınıfları listele
     Route::get('/workshops', [WorkshopController::class, 'index']);
     Route::get('/workshops/{id}', [WorkshopController::class, 'show']);
 });
@@ -67,7 +67,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
     Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::put('/students/{id}/status', [StudentController::class, 'updateStatus']);
     
-    // Atölye yönetimi
+    // Sınıf yönetimi
     Route::post('/workshops', [WorkshopController::class, 'store']);
     Route::put('/workshops/{id}', [WorkshopController::class, 'update']);
     Route::delete('/workshops/{id}', [WorkshopController::class, 'destroy']);

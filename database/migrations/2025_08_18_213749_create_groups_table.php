@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Grup adı
-            $table->foreignId('workshop_id')->constrained()->onDelete('cascade'); // Atölye ilişkisi
+            $table->foreignId('workshop_id')->constrained()->onDelete('cascade'); // Sınıf ilişkisi
             $table->foreignId('instructor_id')->constrained('users')->onDelete('cascade'); // Eğitmen
             $table->integer('capacity')->default(20); // Kontenjan
             $table->integer('current_enrollment')->default(0); // Mevcut kayıt sayısı

@@ -1,26 +1,26 @@
 @extends('admin.layout')
 
-@section('title', 'Atölye Yönetimi - Keşfet LAB')
-@section('page-title', 'Atölye Yönetimi')
+@section('title', 'Sınıf Yönetimi - Keşfet LAB')
+@section('page-title', 'Sınıf Yönetimi')
 
 @section('content')
-<!-- Yeni Atölye Ekleme Butonu -->
+<!-- Yeni Sınıf Ekleme Butonu -->
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="fas fa-flask me-2"></i>
-                Atölyeler
+                Sınıflar
             </h5>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWorkshopModal">
                 <i class="fas fa-plus me-2"></i>
-                Yeni Atölye Ekle
+                Yeni Sınıf Ekle
             </button>
         </div>
     </div>
 </div>
 
-<!-- Atölye Listesi -->
+<!-- Sınıf Listesi -->
 <div class="row">
     @forelse($workshops as $workshop)
     <div class="col-lg-4 col-md-6 mb-4">
@@ -98,7 +98,7 @@
                     @method('PUT')
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name{{ $workshop->id }}" class="form-label">Atölye Adı</label>
+                            <label for="name{{ $workshop->id }}" class="form-label">Sınıf Adı</label>
                             <input type="text" class="form-control" id="name{{ $workshop->id }}" 
                                    name="name" value="{{ $workshop->name }}" required>
                         </div>
@@ -147,22 +147,22 @@
         <div class="table-card">
             <div class="text-center text-muted py-5">
                 <i class="fas fa-flask fa-3x mb-3"></i>
-                <h5>Henüz atölye bulunmuyor</h5>
-                <p>İlk atölyeyi eklemek için yukarıdaki butonu kullanın.</p>
+                <h5>Henüz sınıf bulunmuyor</h5>
+                <p>İlk sınıfı eklemek için yukarıdaki butonu kullanın.</p>
             </div>
         </div>
     </div>
     @endforelse
 </div>
 
-<!-- Yeni Atölye Ekleme Modal -->
+<!-- Yeni Sınıf Ekleme Modal -->
 <div class="modal fade" id="addWorkshopModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="fas fa-plus me-2"></i>
-                    Yeni Atölye Ekle
+                    Yeni Sınıf Ekle
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -170,7 +170,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Atölye Adı</label>
+                        <label for="name" class="form-label">Sınıf Adı</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     
@@ -213,7 +213,7 @@
 
 <script>
 function deleteWorkshop(workshopId) {
-    if (confirm('Bu atölyeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+    if (confirm('Bu sınıfı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
         fetch(`/admin/workshops/${workshopId}`, {
             method: 'DELETE',
             headers: {

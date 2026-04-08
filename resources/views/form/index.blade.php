@@ -233,7 +233,7 @@
                     </div>
 
                     <div class="section">
-                        <h4 class="section-title"><i class="fas fa-flask"></i> Katılmak İstediğiniz Atölyeler</h4>
+                        <h4 class="section-title"><i class="fas fa-flask"></i> Katılmak İstediğiniz Sınıflar</h4>
                         <div class="workshop-grid">
                             @foreach($workshops as $workshop)
                                 <div class="workshop-item">
