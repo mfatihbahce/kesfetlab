@@ -6,33 +6,41 @@
 
 @section('content')
 <style>
-    .list-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
-    .list-card { background: #fff; border: 1px solid #e8edf3; border-radius: 16px; box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06); }
-    .list-head {
-        background: #f8fafc;
-        border-bottom: 1px solid #e8edf3;
-        padding: 12px 16px;
+    .students-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+    .students-card {
+        background: #fff;
+        border: 1px solid #e8edf3;
+        border-radius: 16px;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
     }
-    .list-filter { padding: 18px; }
+    .students-filter { padding: 18px; margin-bottom: 14px; }
+    .students-header {
+        padding: 12px 16px; border-bottom: 1px solid #edf2f7; background: #f8fafc;
+        display: flex; align-items: center; justify-content: space-between;
+    }
     .input-wrap { position: relative; }
     .input-wrap i {
         position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
         color: #94a3b8; font-size: 12px;
     }
-    .input-wrap .form-control, .input-wrap .form-select { border-radius: 12px; padding-left: 34px; border-color: #d7dee8; }
-    .input-wrap .form-control:focus, .input-wrap .form-select:focus { border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2); }
+    .input-wrap .form-control, .input-wrap .form-select {
+        border-radius: 12px; padding-left: 34px; border-color: #d7dee8;
+    }
+    .input-wrap .form-control:focus, .input-wrap .form-select:focus {
+        border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2);
+    }
     .count-pill { border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .table-modern { margin-bottom: 0; }
-    .table-modern thead th {
+    .table-students { margin-bottom: 0; }
+    .table-students thead th {
         font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
         color: #64748b;
         border-bottom: 1px solid #e8edf3;
         background: #f8fafc;
         padding: 12px 14px; white-space: nowrap;
     }
-    .table-modern tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
-    .table-modern tbody tr { transition: background-color .2s ease; }
-    .table-modern tbody tr:hover { background: #f8fafc; }
+    .table-students tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
+    .table-students tbody tr { transition: background-color .2s ease; }
+    .table-students tbody tr:hover { background: #f8fafc; }
     .avatar-sm {
         width: 40px; height: 40px; border-radius: 999px;
         background: #fff3d1 !important; color: #b7791f;
@@ -42,11 +50,10 @@
     .action-btn { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; transition: all .2s ease; }
     .action-btn:hover { transform: scale(1.05); }
 </style>
-<div class="container-fluid list-shell">
+<div class="students-shell">
     <!-- Filtreler -->
-    <div class="list-card mb-4">
-        <div class="list-filter">
-            <form method="GET" action="{{ route('admin.parents') }}" class="row g-3 list-filter">
+    <div class="students-card students-filter">
+            <form method="GET" action="{{ route('admin.parents') }}" class="row g-3 align-items-end">
                 <div class="col-md-3">
                     <label for="status" class="form-label small text-muted fw-semibold">Durum</label>
                     <div class="input-wrap">
@@ -65,30 +72,26 @@
                         <input type="text" name="search" id="search" class="form-control" placeholder="Ad, telefon veya T.C. kimlik..." value="{{ request('search') }}">
                     </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary me-2">
+                <div class="col-md-3 d-flex gap-2 align-items-end justify-content-md-end">
+                    <button type="submit" class="btn btn-primary rounded-3 px-3">
                         <i class="fas fa-search me-1"></i>Filtrele
                     </button>
-                    <a href="{{ route('admin.parents') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.parents') }}" class="btn btn-outline-secondary rounded-3 px-3">
                         <i class="fas fa-times me-1"></i>Temizle
                     </a>
                 </div>
             </form>
-        </div>
     </div>
 
     <!-- Veliler Listesi -->
-    <div class="list-card">
-        <div class="list-head d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-                <i class="fas fa-user-friends me-2"></i>Veli Listesi
-            </h5>
-            <span class="badge bg-primary count-pill">{{ $parents->total() }} veli</span>
+    <div class="students-card overflow-hidden">
+        <div class="students-header">
+            <h5 class="mb-0 fw-semibold"><i class="fas fa-user-friends me-2 text-muted"></i>Veli Listesi</h5>
+            <span class="badge text-bg-primary count-pill">{{ $parents->total() }} veli</span>
         </div>
-        <div class="card-body">
             @if($parents->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-modern">
+                    <table class="table table-students">
                         <thead>
                             <tr>
                                 <th>Veli Bilgileri</th>
@@ -104,8 +107,8 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-3">
-                                            <i class="fas fa-user text-white"></i>
+                                        <div class="avatar-sm me-3">
+                                            <i class="fas fa-user"></i>
                                         </div>
                                         <div>
                                             <h6 class="mb-0">{{ $parent->full_name }}</h6>
@@ -159,18 +162,18 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-4">
+                @if($parents->hasPages())
+                <div class="px-3 py-3 border-top">
                     {{ $parents->links() }}
                 </div>
+                @endif
             @else
-                <div class="text-center py-5">
+                <div class="text-center py-5 px-3">
                     <i class="fas fa-user-friends fa-3x text-muted mb-3"></i>
                     <h5 class="text-muted">Henüz veli kaydı bulunmuyor</h5>
-                    <p class="text-muted">Online form üzerinden öğrenci kayıtları yapıldıktan sonra veliler burada görünecektir.</p>
+                    <p class="text-muted mb-0">Online form üzerinden öğrenci kayıtları yapıldıktan sonra veliler burada görünecektir.</p>
                 </div>
             @endif
-        </div>
     </div>
 </div>
 

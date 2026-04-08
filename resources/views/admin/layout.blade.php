@@ -300,7 +300,6 @@
             @else
                 <h4>{{ $brandName ?? 'Kesfet LAB' }}</h4>
             @endif
-            <small style="color: rgba(255,255,255,0.7);">Yonetici Paneli</small>
         </div>
         
         <nav class="sidebar-nav">

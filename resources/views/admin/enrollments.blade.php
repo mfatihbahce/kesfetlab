@@ -5,33 +5,39 @@
 
 @section('content')
 <style>
-    .list-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
-    .list-card { background: #fff; border: 1px solid #e8edf3; border-radius: 16px; box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06); }
-    .list-head {
-        background: #f8fafc;
-        border-bottom: 1px solid #e8edf3;
-        padding: 12px 16px;
+    .students-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+    .students-card {
+        background: #fff;
+        border: 1px solid #e8edf3;
+        border-radius: 16px;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
     }
-    .list-filter { padding: 18px; }
+    .students-filter { padding: 18px; margin-bottom: 14px; }
+    .students-header {
+        padding: 12px 16px; border-bottom: 1px solid #edf2f7; background: #f8fafc;
+        display: flex; align-items: center; justify-content: space-between;
+    }
     .input-wrap { position: relative; }
     .input-wrap i {
         position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
         color: #94a3b8; font-size: 12px;
     }
-    .input-wrap .form-control, .input-wrap .form-select { border-radius: 12px; padding-left: 34px; border-color: #d7dee8; }
-    .input-wrap .form-control:focus, .input-wrap .form-select:focus { border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2); }
+    .input-wrap .form-control, .input-wrap .form-select {
+        border-radius: 12px; padding-left: 34px; border-color: #d7dee8;
+    }
+    .input-wrap .form-control:focus, .input-wrap .form-select:focus {
+        border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2);
+    }
     .count-pill { border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .table-modern { margin-bottom: 0; }
-    .table-modern thead th {
-        font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
-        color: #64748b;
-        border-bottom: 1px solid #e8edf3;
-        background: #f8fafc;
+    .table-students { margin-bottom: 0; }
+    .table-students thead th {
+        font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e8edf3;
         padding: 12px 14px; white-space: nowrap;
     }
-    .table-modern tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
-    .table-modern tbody tr { transition: background-color .2s ease; }
-    .table-modern tbody tr:hover { background: #f8fafc; }
+    .table-students tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
+    .table-students tbody tr { transition: background-color .2s ease; }
+    .table-students tbody tr:hover { background: #f8fafc; }
     .enroll-avatar {
         width: 40px; height: 40px; border-radius: 999px;
         background: #fff3d1; color: #b7791f; display: inline-flex; align-items: center; justify-content: center;
@@ -50,12 +56,10 @@
     .empty-state { padding: 48px 16px; text-align: center; color: #64748b; }
     .empty-icon { width: 56px; height: 56px; border-radius: 999px; margin: 0 auto 10px; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; }
 </style>
-<div class="list-shell">
-    <div class="col-12">
+<div class="students-shell">
         <!-- Filtreler -->
-        <div class="list-card mb-4">
-            <div class="list-filter">
-                <form method="GET" action="{{ route('admin.enrollments') }}" class="row g-3 list-filter">
+        <div class="students-card students-filter">
+                <form method="GET" action="{{ route('admin.enrollments') }}" class="row g-3 align-items-end">
                     <div class="col-md-3">
                         <label for="status" class="form-label small text-muted fw-semibold">Kayıt Durumu</label>
                         <div class="input-wrap">
@@ -83,33 +87,27 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label">&nbsp;</label>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search me-2"></i>Filtrele
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="d-flex gap-2 w-100 justify-content-md-end">
+                            <button type="submit" class="btn btn-primary rounded-3 px-3">
+                                <i class="fas fa-search me-1"></i>Filtrele
                             </button>
-                            <a href="{{ route('admin.enrollments') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times me-2"></i>Temizle
+                            <a href="{{ route('admin.enrollments') }}" class="btn btn-outline-secondary rounded-3 px-3">
+                                <i class="fas fa-times me-1"></i>Temizle
                             </a>
                         </div>
                     </div>
                 </form>
-            </div>
         </div>
 
         <!-- Kayıt Tablosu -->
-        <div class="list-card">
-            <div class="list-head d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="fas fa-clipboard-list me-2"></i>
-                    Öğrenci Kayıt Listesi
-                </h5>
-                <span class="badge bg-primary count-pill">{{ $enrollments->total() }} kayıt</span>
+        <div class="students-card overflow-hidden">
+            <div class="students-header">
+                <h5 class="mb-0 fw-semibold"><i class="fas fa-clipboard-list me-2 text-muted"></i>Öğrenci Kayıt Listesi</h5>
+                <span class="badge text-bg-primary count-pill">{{ $enrollments->total() }} kayıt</span>
             </div>
-            <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-modern">
+                    <table class="table table-students">
                         <thead>
                             <tr>
                                 <th style="width: 25%;">Öğrenci</th>
@@ -244,15 +242,12 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            
             @if($enrollments->hasPages())
-            <div class="card-footer">
+            <div class="px-3 py-3 border-top">
                 {{ $enrollments->links() }}
             </div>
             @endif
         </div>
-    </div>
 </div>
 
 <!-- Kayıt Detay Modalları -->

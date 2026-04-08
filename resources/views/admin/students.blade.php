@@ -207,7 +207,7 @@
                                 <div class="empty-icon">
                                     <i class="fas fa-user-graduate"></i>
                                 </div>
-                                <div class="fw-semibold text-dark">No students found</div>
+                                <div class="fw-semibold text-dark">Öğrenci bulunamadı</div>
                                 <div class="small mt-1">Filtreleri değiştirerek tekrar deneyin veya yeni öğrenci kaydı bekleyin.</div>
                             </div>
                         </td>
