@@ -55,7 +55,7 @@
                             <tr>
                                 <th style="width: 25%;">Öğrenci Bilgileri</th>
                                 <th style="width: 20%;">Veli Bilgileri</th>
-                                <th style="width: 20%;">Acil Durum</th>
+                                <th style="width: 20%;">Acil Durum Iletisim</th>
                                 <th style="width: 10%;">Durum</th>
                                 <th style="width: 10%;">Tarih</th>
                                 <th style="width: 15%;">İşlemler</th>
@@ -191,8 +191,14 @@
                             <tr><td><strong>Doğum Tarihi:</strong></td><td>{{ $student->birth_date->format('d.m.Y') }}</td></tr>
                             <tr><td><strong>Yaş:</strong></td><td>{{ $student->age }}</td></tr>
                             <tr><td><strong>Adres:</strong></td><td>{{ $student->address }}</td></tr>
+                            @if($student->school_name)
+                            <tr><td><strong>Okul Adi:</strong></td><td>{{ $student->school_name }}</td></tr>
+                            @endif
+                            @if($student->emergency_contact_relation)
+                            <tr><td><strong>Yakinlik Derecesi:</strong></td><td>{{ $student->emergency_contact_relation }}</td></tr>
+                            @endif
                             @if($student->health_condition)
-                            <tr><td><strong>Sağlık Durumu:</strong></td><td>{{ $student->health_condition }}</td></tr>
+                            <tr><td><strong>Saglik Problemi (Varsa):</strong></td><td>{{ $student->health_condition }}</td></tr>
                             @endif
                         </table>
                     </div>
@@ -222,7 +228,7 @@
                             <tr><td><strong>Ad Soyad:</strong></td><td>{{ $student->emergency_contact_name }}</td></tr>
                             <tr><td><strong>Telefon:</strong></td><td>{{ $student->emergency_contact_phone }}</td></tr>
                             @if($student->emergency_contact_relation)
-                            <tr><td><strong>İlişki:</strong></td><td>{{ $student->emergency_contact_relation }}</td></tr>
+                            <tr><td><strong>Yakinlik Derecesi:</strong></td><td>{{ $student->emergency_contact_relation }}</td></tr>
                             @endif
                         </table>
                     </div>
@@ -233,12 +239,19 @@
                                                 <table class="table table-sm">
                                                     <tr><td><strong>Kayıt Tarihi:</strong></td><td>{{ $student->created_at->format('d.m.Y H:i') }}</td></tr>
                                                     <tr><td><strong>Durum:</strong></td><td>{{ $student->registration_status_text }}</td></tr>
-                                                    @if($student->enrollments->count() > 0 && $student->enrollments->first()->workshop)
-                                                    <tr><td><strong>Seçilen Atölye:</strong></td><td>{{ $student->enrollments->first()->workshop->name }}</td></tr>
-                                                    <tr><td><strong>Atölye Ücreti:</strong></td><td>{{ number_format($student->enrollments->first()->amount, 2) }} ₺</td></tr>
+                                                    @if($student->enrollments->count() > 0)
+                                                    <tr>
+                                                        <td><strong>Secilen Atolyeler:</strong></td>
+                                                        <td>
+                                                            @foreach($student->enrollments as $enrollment)
+                                                                @if($enrollment->workshop)
+                                                                    <span class="badge bg-light text-dark border mb-1">{{ $enrollment->workshop->name }}</span>
+                                                                @endif
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
                                                     @else
-                                                    <tr><td><strong>Seçilen Atölye:</strong></td><td><span class="text-muted">Henüz atölye seçilmemiş</span></td></tr>
-                                                    <tr><td><strong>Atölye Ücreti:</strong></td><td><span class="text-muted">-</span></td></tr>
+                                                    <tr><td><strong>Secilen Atolyeler:</strong></td><td><span class="text-muted">Henuz atölye secilmemis</span></td></tr>
                                                     @endif
                                                     @if($student->notes)
                                                     <tr><td><strong>Notlar:</strong></td><td>{{ $student->notes }}</td></tr>

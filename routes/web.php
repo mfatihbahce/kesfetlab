@@ -70,6 +70,10 @@ Route::prefix('admin')->group(function () {
         Route::put('/parents/{id}/status', [AdminController::class, 'updateParentStatus'])->name('admin.parents.status');
         Route::post('/parents/{id}/students', [AdminController::class, 'addParentStudent'])->name('admin.parents.add-student');
         Route::delete('/parents/{parentId}/students/{studentId}', [AdminController::class, 'removeParentStudent'])->name('admin.parents.remove-student');
+
+        // Sistem ayarlari
+        Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+        Route::put('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
     });
 });
 

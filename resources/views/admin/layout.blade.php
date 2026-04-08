@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Keşfet LAB - Yönetici Paneli')</title>
+    <title>@yield('title', ($brandName ?? 'Kesfet LAB') . ' - Yonetici Paneli')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
+            --primary-color: #ff7a00;
+            --secondary-color: #f5d100;
+            --dark-color: #2f3138;
+            --dark-soft: #464a55;
+            --light-color: #fff7cc;
             --sidebar-width: 250px;
         }
         
@@ -26,7 +29,7 @@
             left: 0;
             height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(160deg, var(--dark-color) 0%, var(--dark-soft) 100%);
             z-index: 1000;
             transition: all 0.3s ease;
         }
@@ -37,6 +40,13 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
+        .sidebar-logo {
+            max-width: 170px;
+            max-height: 64px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
         .sidebar-header h4 {
             color: white;
             margin: 0;
@@ -63,7 +73,7 @@
         
         .nav-link:hover, .nav-link.active {
             color: white;
-            background: rgba(255,255,255,0.1);
+            background: linear-gradient(120deg, rgba(255, 122, 0, 0.95), rgba(245, 209, 0, 0.9));
             transform: translateX(5px);
         }
         
@@ -121,7 +131,7 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--dark-color);
             margin-bottom: 0.5rem;
         }
         
@@ -139,8 +149,8 @@
         }
         
         .table-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
+            background: linear-gradient(120deg, var(--dark-color) 0%, var(--dark-soft) 100%);
+            color: #fff;
             padding: 1rem 1.5rem;
             font-weight: 600;
         }
@@ -164,16 +174,17 @@
         
         /* Buttons */
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(120deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border: none;
             border-radius: 10px;
             padding: 0.5rem 1.5rem;
             font-weight: 600;
+            color: #2f3138;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 122, 0, 0.35);
         }
         
         /* Status badges */
@@ -190,6 +201,58 @@
         .badge-rejected {
             background: #dc3545;
             color: white;
+        }
+
+        .kpi-card {
+            position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #fff9ef 100%);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 8px 20px rgba(47,49,56,0.08);
+            border: 1px solid rgba(255,122,0,0.18);
+            overflow: hidden;
+        }
+
+        .kpi-card::after {
+            content: "";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(245,209,0,0.32) 0%, rgba(245,209,0,0) 65%);
+        }
+
+        .kpi-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .kpi-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: linear-gradient(125deg, var(--primary-color), var(--secondary-color));
+            color: #2f3138;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            line-height: 1;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .kpi-label {
+            color: #5f6470;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
         
         /* Responsive */
@@ -212,8 +275,12 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h4><i class="fas fa-graduation-cap me-2"></i>Keşfet LAB</h4>
-            <small style="color: rgba(255,255,255,0.7);">Yönetici Paneli</small>
+            @if(!empty($brandLogoPath))
+                <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="sidebar-logo">
+            @else
+                <h4>{{ $brandName ?? 'Kesfet LAB' }}</h4>
+            @endif
+            <small style="color: rgba(255,255,255,0.7);">Yonetici Paneli</small>
         </div>
         
         <nav class="sidebar-nav">
@@ -263,6 +330,13 @@
                 <a href="{{ route('admin.parents') }}" class="nav-link {{ request()->routeIs('admin.parents*') ? 'active' : '' }}">
                     <i class="fas fa-user-friends"></i>
                     Veliler
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="{{ route('admin.settings') }}" class="nav-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                    <i class="fas fa-cog"></i>
+                    Ayarlar
                 </a>
             </div>
             

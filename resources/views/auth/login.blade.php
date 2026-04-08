@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Giris Yap | Kesfet Lab</title>
+    <title>Giris Yap | {{ $brandName ?? 'Kesfet LAB' }}</title>
     <style>
         * { box-sizing: border-box; }
+        :root {
+            --brand-orange: #ff7a00;
+            --brand-yellow: #f5d100;
+            --brand-dark: #2f3138;
+            --brand-dark-soft: #464a55;
+        }
         body {
             margin: 0;
             min-height: 100vh;
             font-family: "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+            background: linear-gradient(140deg, var(--brand-dark), var(--brand-dark-soft));
             display: grid;
             place-items: center;
             padding: 24px;
@@ -22,7 +28,15 @@
             background: #fff;
             border-radius: 20px;
             padding: 32px 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+            border-top: 5px solid var(--brand-orange);
+        }
+        .brand-logo {
+            display: block;
+            max-width: 220px;
+            max-height: 86px;
+            margin: 0 auto 12px;
+            object-fit: contain;
         }
         .title {
             margin: 0 0 6px 0;
@@ -55,8 +69,8 @@
         }
         .input:focus {
             outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+            border-color: var(--brand-orange);
+            box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.16);
         }
         .input-error { border-color: #dc2626; }
         .error {
@@ -79,7 +93,7 @@
             color: #374151;
         }
         .link {
-            color: #4f46e5;
+            color: var(--brand-orange);
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
@@ -90,20 +104,24 @@
             height: 48px;
             border: 0;
             border-radius: 12px;
-            background: #4f46e5;
-            color: white;
+            background: linear-gradient(120deg, var(--brand-orange), var(--brand-yellow));
+            color: var(--brand-dark);
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: background .2s, transform .08s;
         }
-        .btn:hover { background: #4338ca; }
+        .btn:hover { filter: brightness(0.96); }
         .btn:active { transform: translateY(1px); }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h1 class="title">Yonetici Girisi</h1>
+        @if(!empty($brandLogoPath))
+            <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="brand-logo">
+        @else
+            <h1 class="title">{{ $brandName ?? 'Kesfet LAB' }}</h1>
+        @endif
         <p class="subtitle">Panelinize erismek icin bilgilerinizi girin.</p>
 
         <form method="POST" action="{{ route('login') }}">

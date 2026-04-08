@@ -30,7 +30,8 @@ class FormController extends Controller
     {
         // Validation rules
         $rules = Student::rules();
-        $rules['workshop_id'] = 'required|exists:workshops,id';
+        $rules['workshop_ids'] = 'required|array|min:1';
+        $rules['workshop_ids.*'] = 'exists:workshops,id';
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -41,26 +42,27 @@ class FormController extends Controller
         }
 
         try {
-            // Öğrenci verilerini hazırla (workshop_id hariç)
-            $studentData = $request->except(['workshop_id']);
+            // Öğrenci verilerini hazırla (workshop_ids hariç)
+            $studentData = $request->except(['workshop_ids']);
             
             // Öğrenci kaydını oluştur
             $student = Student::create($studentData);
 
-            // Atölye seçimi için enrollment oluştur
-            $workshop = Workshop::find($request->workshop_id);
-            
-            // Enrollment tablosuna kayıt ekle
-            $student->enrollments()->create([
-                'workshop_id' => $workshop->id,
-                'group_id' => null, // Henüz grup atanmamış
-                'status' => 'pending',
-                'enrollment_date' => now(),
-                'start_date' => now(),
-                'amount' => $workshop->price,
-                'payment_status' => 'pending',
-                'is_active' => true,
-            ]);
+            // Birden fazla atölye secimi icin enrollment kayitlari olustur
+            $workshops = Workshop::whereIn('id', $request->workshop_ids)->get();
+
+            foreach ($workshops as $workshop) {
+                $student->enrollments()->create([
+                    'workshop_id' => $workshop->id,
+                    'group_id' => null, // Henuz grup atanmamis
+                    'status' => 'pending',
+                    'enrollment_date' => now(),
+                    'start_date' => now(),
+                    'amount' => $workshop->price,
+                    'payment_status' => 'pending',
+                    'is_active' => true,
+                ]);
+            }
 
             return redirect()->route('form.success')
                 ->with('success', 'Öğrenci kaydınız başarıyla alınmıştır. En kısa sürede size dönüş yapılacaktır.');

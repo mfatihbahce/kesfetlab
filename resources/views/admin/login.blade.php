@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Girişi - Keşfet LAB</title>
+    <title>Admin Girisi - {{ $brandName ?? 'Kesfet LAB' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2f3138 0%, #464a55 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -31,8 +31,15 @@
             margin-bottom: 2rem;
         }
         
+        .brand-logo {
+            max-width: 220px;
+            max-height: 86px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
         .login-header h1 {
-            color: #667eea;
+            color: #ff7a00;
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -52,12 +59,12 @@
         }
         
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #ff7a00;
+            box-shadow: 0 0 0 0.2rem rgba(255, 122, 0, 0.18);
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(120deg, #ff7a00 0%, #f5d100 100%);
             border: none;
             border-radius: 10px;
             padding: 12px 30px;
@@ -68,7 +75,7 @@
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 122, 0, 0.35);
         }
         
         .alert {
@@ -94,7 +101,7 @@
         }
         
         .back-link a {
-            color: #667eea;
+            color: #ff7a00;
             text-decoration: none;
         }
         
@@ -106,7 +113,11 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1><i class="fas fa-graduation-cap me-2"></i>Keşfet LAB</h1>
+            @if(!empty($brandLogoPath))
+                <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="brand-logo">
+            @else
+                <h1>{{ $brandName ?? 'Kesfet LAB' }}</h1>
+            @endif
             <p>Yönetici Paneli Girişi</p>
         </div>
 

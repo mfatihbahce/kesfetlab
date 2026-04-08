@@ -9,9 +9,11 @@ use App\Models\Group;
 use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\AppSetting;
 use App\Models\ParentUser;
 use App\Models\ParentStudent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -822,5 +824,61 @@ class AdminController extends Controller
             'success' => true,
             'message' => 'Öğrenci-veli ilişkisi başarıyla kaldırıldı.'
         ]);
+    }
+
+    /**
+     * Sistem ayarlari sayfasi.
+     */
+    public function settings()
+    {
+        $settings = [
+            'brand_name' => AppSetting::getValue('brand_name', 'Kesfet LAB'),
+            'brand_logo_path' => AppSetting::getValue('brand_logo_path'),
+        ];
+
+        return view('admin.settings', compact('settings'));
+    }
+
+    /**
+     * Sistem ayarlarini kaydet.
+     */
+    public function updateSettings(Request $request)
+    {
+        $request->validate([
+            'brand_name' => 'required|string|max:80',
+            'brand_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:5120',
+        ], [
+            'brand_name.required' => 'Marka adi alani zorunludur.',
+            'brand_name.max' => 'Marka adi en fazla 80 karakter olabilir.',
+            'brand_logo.image' => 'Yuklenen dosya bir gorsel olmalidir.',
+            'brand_logo.mimes' => 'Logo yalnizca jpg, jpeg, png, webp veya svg formatinda olabilir.',
+            'brand_logo.max' => 'Logo boyutu en fazla 5 MB olabilir.',
+        ]);
+
+        AppSetting::setValue('brand_name', $request->brand_name);
+
+        if ($request->hasFile('brand_logo')) {
+            $uploadDir = public_path('uploads/branding');
+            if (!File::exists($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true);
+            }
+
+            $oldPath = AppSetting::getValue('brand_logo_path');
+            if ($oldPath) {
+                $oldFullPath = public_path(ltrim($oldPath, '/'));
+                if (File::exists($oldFullPath)) {
+                    File::delete($oldFullPath);
+                }
+            }
+
+            $logoFile = $request->file('brand_logo');
+            $fileName = 'brand_logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
+            $logoFile->move($uploadDir, $fileName);
+
+            AppSetting::setValue('brand_logo_path', '/uploads/branding/' . $fileName);
+        }
+
+        return redirect()->route('admin.settings')
+            ->with('success', 'Ayarlar basariyla guncellendi.');
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 use App\Models\Notification;
+use App\Models\AppSetting;
 use App\Observers\NotificationObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Uygulama genelinde marka ayarlarini paylas.
+        View::composer('*', function ($view) {
+            try {
+                $brandName = AppSetting::getValue('brand_name', 'Kesfet LAB');
+                $brandLogoPath = AppSetting::getValue('brand_logo_path');
+            } catch (\Throwable $e) {
+                // Migration oncesi/table yoksa fallback kullan.
+                $brandName = 'Kesfet LAB';
+                $brandLogoPath = null;
+            }
+
+            $view->with('brandName', $brandName);
+            $view->with('brandLogoPath', $brandLogoPath);
+        });
+
         // Observer'ı manuel olarak kayıt et
         try {
             Notification::observe(NotificationObserver::class);

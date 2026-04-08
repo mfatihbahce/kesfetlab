@@ -7,42 +7,42 @@
 <div class="row">
     <!-- İstatistik Kartları -->
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="stat-card">
-            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <i class="fas fa-user-graduate"></i>
+        <div class="kpi-card">
+            <div class="kpi-head">
+                <div class="kpi-icon"><i class="fas fa-user-graduate"></i></div>
             </div>
-            <div class="stat-number">{{ $stats['total_students'] }}</div>
-            <div class="stat-label">Toplam Öğrenci</div>
+            <div class="kpi-value">{{ $stats['total_students'] }}</div>
+            <div class="kpi-label">Toplam Ogrenci</div>
         </div>
     </div>
     
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="stat-card">
-            <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);">
-                <i class="fas fa-clock"></i>
+        <div class="kpi-card">
+            <div class="kpi-head">
+                <div class="kpi-icon"><i class="fas fa-clock"></i></div>
             </div>
-            <div class="stat-number">{{ $stats['pending_students'] }}</div>
-            <div class="stat-label">Bekleyen Kayıt</div>
+            <div class="kpi-value">{{ $stats['pending_students'] }}</div>
+            <div class="kpi-label">Bekleyen Kayit</div>
         </div>
     </div>
     
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="stat-card">
-            <div class="stat-icon" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
-                <i class="fas fa-flask"></i>
+        <div class="kpi-card">
+            <div class="kpi-head">
+                <div class="kpi-icon"><i class="fas fa-flask"></i></div>
             </div>
-            <div class="stat-number">{{ $stats['active_workshops'] }}</div>
-            <div class="stat-label">Aktif Atölye</div>
+            <div class="kpi-value">{{ $stats['active_workshops'] }}</div>
+            <div class="kpi-label">Aktif Atolye</div>
         </div>
     </div>
     
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="stat-card">
-            <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">
-                <i class="fas fa-users"></i>
+        <div class="kpi-card">
+            <div class="kpi-head">
+                <div class="kpi-icon"><i class="fas fa-users"></i></div>
             </div>
-            <div class="stat-number">{{ $stats['active_groups'] }}</div>
-            <div class="stat-label">Aktif Grup</div>
+            <div class="kpi-value">{{ $stats['active_groups'] }}</div>
+            <div class="kpi-label">Aktif Grup</div>
         </div>
     </div>
 </div>
@@ -60,6 +60,7 @@
                     <thead>
                         <tr>
                             <th>Öğrenci</th>
+                            <th>Okul</th>
                             <th>T.C. Kimlik</th>
                             <th>Durum</th>
                             <th>Tarih</th>
@@ -72,6 +73,13 @@
                                 <strong>{{ $student->full_name }}</strong>
                                 <br>
                                 <small class="text-muted">{{ $student->parent_full_name }}</small>
+                            </td>
+                            <td>
+                                @if($student->school_name)
+                                    <span>{{ $student->school_name }}</span>
+                                @else
+                                    <span class="text-muted">Belirtilmemis</span>
+                                @endif
                             </td>
                             <td>{{ $student->tc_identity }}</td>
                             <td>
@@ -87,7 +95,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted">
+                            <td colspan="5" class="text-center text-muted">
                                 <i class="fas fa-inbox me-2"></i>
                                 Henüz öğrenci kaydı bulunmuyor
                             </td>
