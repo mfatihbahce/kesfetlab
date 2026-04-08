@@ -1320,7 +1320,6 @@ class AdminController extends Controller
             'confirm_text.in' => 'Veri sifirlama icin kutuya SIFIRLA yazmalisiniz.',
         ]);
 
-        DB::beginTransaction();
         try {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
@@ -1338,17 +1337,13 @@ class AdminController extends Controller
             // Sadece admin harici kullanicilar temizlenir.
             DB::table('users')->where('role', '!=', 'admin')->delete();
 
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
-            DB::commit();
-
             return redirect()->route('admin.settings')
                 ->with('success', 'Veriler sifirlandi. Admin kullanicilari ve sistem ayarlari korundu.');
         } catch (\Throwable $e) {
-            DB::rollBack();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
             return redirect()->route('admin.settings')
                 ->with('error', 'Veri sifirlama sirasinda hata olustu: ' . $e->getMessage());
+        } finally {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
     }
 }
