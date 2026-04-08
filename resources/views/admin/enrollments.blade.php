@@ -4,32 +4,84 @@
 @section('page-title', 'Öğrenci Yönetimi')
 
 @section('content')
-<div class="row">
+<style>
+    .list-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+    .list-card { background: #fff; border: 1px solid #e8edf3; border-radius: 16px; box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06); }
+    .list-head {
+        background: #f8fafc;
+        border-bottom: 1px solid #e8edf3;
+        padding: 12px 16px;
+    }
+    .list-filter { padding: 18px; }
+    .input-wrap { position: relative; }
+    .input-wrap i {
+        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+        color: #94a3b8; font-size: 12px;
+    }
+    .input-wrap .form-control, .input-wrap .form-select { border-radius: 12px; padding-left: 34px; border-color: #d7dee8; }
+    .input-wrap .form-control:focus, .input-wrap .form-select:focus { border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2); }
+    .count-pill { border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .table-modern { margin-bottom: 0; }
+    .table-modern thead th {
+        font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+        color: #64748b;
+        border-bottom: 1px solid #e8edf3;
+        background: #f8fafc;
+        padding: 12px 14px; white-space: nowrap;
+    }
+    .table-modern tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
+    .table-modern tbody tr { transition: background-color .2s ease; }
+    .table-modern tbody tr:hover { background: #f8fafc; }
+    .enroll-avatar {
+        width: 40px; height: 40px; border-radius: 999px;
+        background: #fff3d1; color: #b7791f; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .badge-soft-pill {
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 6px 10px;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+    }
+    .action-btn { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; transition: all .2s ease; }
+    .action-btn:hover { transform: scale(1.05); }
+    .empty-state { padding: 48px 16px; text-align: center; color: #64748b; }
+    .empty-icon { width: 56px; height: 56px; border-radius: 999px; margin: 0 auto 10px; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; }
+</style>
+<div class="list-shell">
     <div class="col-12">
         <!-- Filtreler -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form method="GET" action="{{ route('admin.enrollments') }}" class="row g-3">
+        <div class="list-card mb-4">
+            <div class="list-filter">
+                <form method="GET" action="{{ route('admin.enrollments') }}" class="row g-3 list-filter">
                     <div class="col-md-3">
-                        <label for="status" class="form-label">Kayıt Durumu</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="">Tümü</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
-                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Onaylandı</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Reddedildi</option>
-                            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>İptal Edildi</option>
-                            <option value="graduated" {{ request('status') == 'graduated' ? 'selected' : '' }}>Mezun</option>
-                        </select>
+                        <label for="status" class="form-label small text-muted fw-semibold">Kayıt Durumu</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-filter"></i>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">Tümü</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
+                                <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Onaylandı</option>
+                                <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Reddedildi</option>
+                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>İptal Edildi</option>
+                                <option value="graduated" {{ request('status') == 'graduated' ? 'selected' : '' }}>Mezun</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        <label for="payment_status" class="form-label">Ödeme Durumu</label>
-                        <select class="form-select" id="payment_status" name="payment_status">
-                            <option value="">Tümü</option>
-                            <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
-                            <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Ödendi</option>
-                            <option value="partial" {{ request('payment_status') == 'partial' ? 'selected' : '' }}>Kısmi</option>
-                            <option value="refunded" {{ request('payment_status') == 'refunded' ? 'selected' : '' }}>İade</option>
-                        </select>
+                        <label for="payment_status" class="form-label small text-muted fw-semibold">Ödeme Durumu</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-credit-card"></i>
+                            <select class="form-select" id="payment_status" name="payment_status">
+                                <option value="">Tümü</option>
+                                <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
+                                <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Ödendi</option>
+                                <option value="partial" {{ request('payment_status') == 'partial' ? 'selected' : '' }}>Kısmi</option>
+                                <option value="refunded" {{ request('payment_status') == 'refunded' ? 'selected' : '' }}>İade</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">&nbsp;</label>
@@ -47,18 +99,18 @@
         </div>
 
         <!-- Kayıt Tablosu -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="list-card">
+            <div class="list-head d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     <i class="fas fa-clipboard-list me-2"></i>
                     Öğrenci Kayıt Listesi
                 </h5>
-                <span class="badge bg-primary fs-6">{{ $enrollments->total() }} kayıt</span>
+                <span class="badge bg-primary count-pill">{{ $enrollments->total() }} kayıt</span>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+                    <table class="table table-modern">
+                        <thead>
                             <tr>
                                 <th style="width: 25%;">Öğrenci</th>
                                 <th style="width: 25%;">Sınıf & Grup</th>
@@ -73,9 +125,8 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                             style="width: 40px; height: 40px;">
-                                            <i class="fas fa-user text-white"></i>
+                                        <div class="enroll-avatar me-3">
+                                            <i class="fas fa-user"></i>
                                         </div>
                                         <div>
                                             <div class="fw-bold">{{ $enrollment->student->full_name }}</div>
@@ -105,38 +156,38 @@
                                 </td>
                                 <td>
                                     @if($enrollment->status == 'pending')
-                                        <span class="badge bg-warning text-dark">
+                                        <span class="badge-soft-pill text-warning-emphasis bg-warning-subtle border border-warning-subtle">
                                             <i class="fas fa-clock me-1"></i>Beklemede
                                         </span>
                                     @elseif($enrollment->status == 'approved')
-                                        <span class="badge bg-success">
+                                        <span class="badge-soft-pill text-success-emphasis bg-success-subtle border border-success-subtle">
                                             <i class="fas fa-check me-1"></i>Onaylandı
                                         </span>
                                     @elseif($enrollment->status == 'rejected')
-                                        <span class="badge bg-danger">
+                                        <span class="badge-soft-pill text-danger-emphasis bg-danger-subtle border border-danger-subtle">
                                             <i class="fas fa-times me-1"></i>Reddedildi
                                         </span>
                                     @else
-                                        <span class="badge bg-secondary">
+                                        <span class="badge-soft-pill text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle">
                                             <i class="fas fa-ban me-1"></i>İptal
                                         </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if($enrollment->payment_status == 'paid')
-                                        <span class="badge bg-success">
+                                        <span class="badge-soft-pill text-success-emphasis bg-success-subtle border border-success-subtle">
                                             <i class="fas fa-check me-1"></i>Ödendi
                                         </span>
                                     @elseif($enrollment->payment_status == 'partial')
-                                        <span class="badge bg-warning text-dark">
+                                        <span class="badge-soft-pill text-warning-emphasis bg-warning-subtle border border-warning-subtle">
                                             <i class="fas fa-clock me-1"></i>Kısmi
                                         </span>
                                     @elseif($enrollment->payment_status == 'refunded')
-                                        <span class="badge bg-info">
+                                        <span class="badge-soft-pill text-info-emphasis bg-info-subtle border border-info-subtle">
                                             <i class="fas fa-undo me-1"></i>İade
                                         </span>
                                     @else
-                                        <span class="badge bg-secondary">
+                                        <span class="badge-soft-pill text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle">
                                             <i class="fas fa-clock me-1"></i>Beklemede
                                         </span>
                                     @endif
@@ -146,23 +197,23 @@
                                     <div class="text-muted small">{{ $enrollment->created_at->format('H:i') }}</div>
                                 </td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.students.detail', $enrollment->student->id) }}" class="btn btn-sm btn-outline-primary" title="Öğrenci Detayı">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{{ route('admin.students.detail', $enrollment->student->id) }}" class="btn btn-sm btn-outline-primary action-btn" title="Öğrenci Detayı">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         
                                         @if($enrollment->status == 'pending')
-                                        <button type="button" class="btn btn-sm btn-outline-info" 
+                                        <button type="button" class="btn btn-sm btn-outline-info action-btn" 
                                                 data-bs-toggle="modal" data-bs-target="#assignGroupModal{{ $enrollment->id }}"
                                                 title="Grup Ata">
                                             <i class="fas fa-users"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-success" 
+                                        <button type="button" class="btn btn-sm btn-outline-success action-btn" 
                                                 onclick="updateEnrollmentStatus({{ $enrollment->id }}, 'approved')"
                                                 title="Onayla">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                        <button type="button" class="btn btn-sm btn-outline-danger action-btn" 
                                                 onclick="updateEnrollmentStatus({{ $enrollment->id }}, 'rejected')"
                                                 title="Reddet">
                                             <i class="fas fa-times"></i>
@@ -170,7 +221,7 @@
                                         @endif
                                         
                                         @if($enrollment->payment_status != 'paid')
-                                        <button type="button" class="btn btn-sm btn-outline-info" 
+                                        <button type="button" class="btn btn-sm btn-outline-info action-btn" 
                                                 onclick="markAsPaid({{ $enrollment->id }})"
                                                 title="Ödendi Olarak İşaretle">
                                             <i class="fas fa-money-bill"></i>
@@ -181,9 +232,12 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-                                    <div class="text-muted">Henüz kayıt bulunmuyor</div>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-clipboard-list"></i></div>
+                                        <div class="fw-semibold text-dark">Henüz kayıt bulunmuyor</div>
+                                        <div class="small mt-1">Filtreleri değiştirin veya yeni başvuru bekleyin.</div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforelse

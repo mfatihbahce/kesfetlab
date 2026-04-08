@@ -4,166 +4,224 @@
 @section('page-title', 'Öğrenci Yönetimi')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <!-- Filtreler -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form method="GET" action="{{ route('admin.students') }}" class="row g-3">
-                    <div class="col-md-3">
-                        <label for="status" class="form-label">Kayıt Durumu</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="">Tümü</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
-                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Onaylandı</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Reddedildi</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="search" class="form-label">Arama</label>
-                        <input type="text" class="form-control" id="search" name="search" 
-                               value="{{ request('search') }}" placeholder="Ad, soyad veya T.C. kimlik...">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">&nbsp;</label>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search me-2"></i>Filtrele
-                            </button>
-                            <a href="{{ route('admin.students') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times me-2"></i>Temizle
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<style>
+    .students-shell { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+    .students-card {
+        background: #fff;
+        border: 1px solid #e8edf3;
+        border-radius: 16px;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+    .students-filter { padding: 18px; margin-bottom: 14px; }
+    .input-wrap { position: relative; }
+    .input-wrap i {
+        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+        color: #94a3b8; font-size: 12px;
+    }
+    .input-wrap .form-control, .input-wrap .form-select {
+        border-radius: 12px; padding-left: 34px; border-color: #d7dee8;
+    }
+    .input-wrap .form-control:focus, .input-wrap .form-select:focus {
+        border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,.2);
+    }
+    .students-header {
+        padding: 12px 16px; border-bottom: 1px solid #edf2f7; background: #f8fafc;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .count-pill { border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .table-students { margin-bottom: 0; }
+    .table-students thead th {
+        font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e8edf3;
+        padding: 12px 14px; white-space: nowrap;
+    }
+    .table-students tbody td { padding: 15px 14px; vertical-align: middle; border-color: #eef2f7; }
+    .table-students tbody tr { transition: background-color .2s ease; }
+    .table-students tbody tr:hover { background: #f8fafc; }
+    .avatar-circle {
+        width: 40px; height: 40px; border-radius: 999px;
+        background: #fff3d1; color: #b7791f;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+    .badge-soft-pill { border-radius: 999px; font-size: 11px; font-weight: 700; padding: 6px 10px; }
+    .action-btn {
+        width: 32px; height: 32px; border-radius: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        transition: all .2s ease;
+    }
+    .action-btn:hover { transform: scale(1.05); }
+    .empty-state { padding: 48px 16px; text-align: center; color: #64748b; }
+    .empty-icon {
+        width: 56px; height: 56px; border-radius: 999px; margin: 0 auto 10px;
+        background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center;
+    }
+</style>
 
-        <!-- Öğrenci Tablosu -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="fas fa-user-graduate me-2"></i>
-                    Öğrenci Listesi
-                </h5>
-                <span class="badge bg-primary fs-6">{{ $students->total() }} öğrenci</span>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 25%;">Öğrenci Bilgileri</th>
-                                <th style="width: 20%;">Veli Bilgileri</th>
-                                <th style="width: 20%;">Acil Durum Iletisim</th>
-                                <th style="width: 10%;">Durum</th>
-                                <th style="width: 10%;">Tarih</th>
-                                <th style="width: 15%;">İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($students as $student)
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                             style="width: 40px; height: 40px;">
-                                            <i class="fas fa-user text-white"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">{{ $student->full_name }}</div>
-                                            <div class="text-muted small">
-                                                <i class="fas fa-id-card me-1"></i>{{ $student->tc_identity }}
-                                            </div>
-                                            <div class="text-muted small">
-                                                <i class="fas fa-birthday-cake me-1"></i>{{ $student->birth_date->format('d.m.Y') }} ({{ $student->age }} yaş)
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ $student->parent_full_name }}</div>
-                                    <div class="text-muted small">
-                                        <i class="fas fa-phone me-1"></i>{{ $student->parent_phone }}
-                                    </div>
-                                    @if($student->parent_email)
-                                    <div class="text-muted small">
-                                        <i class="fas fa-envelope me-1"></i>{{ $student->parent_email }}
-                                    </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="fw-bold">{{ $student->emergency_contact_name }}</div>
-                                    <div class="text-muted small">
-                                        <i class="fas fa-phone me-1"></i>{{ $student->emergency_contact_phone }}
-                                    </div>
-                                    @if($student->emergency_contact_relation)
-                                    <div class="text-muted small">
-                                        <i class="fas fa-user-friends me-1"></i>{{ $student->emergency_contact_relation }}
-                                    </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($student->registration_status == 'pending')
-                                        <span class="badge bg-warning text-dark">
-                                            <i class="fas fa-clock me-1"></i>Beklemede
-                                        </span>
-                                    @elseif($student->registration_status == 'approved')
-                                        <span class="badge bg-success">
-                                            <i class="fas fa-check me-1"></i>Onaylandı
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger">
-                                            <i class="fas fa-times me-1"></i>Reddedildi
-                                        </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div>{{ $student->created_at->format('d.m.Y') }}</div>
-                                    <div class="text-muted small">{{ $student->created_at->format('H:i') }}</div>
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                data-bs-toggle="modal" data-bs-target="#studentModal{{ $student->id }}"
-                                                title="Detayları Görüntüle">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        
-                                        @if($student->registration_status == 'pending')
-                                        <button type="button" class="btn btn-sm btn-outline-success" 
-                                                onclick="updateStudentStatus({{ $student->id }}, 'approved')"
-                                                title="Onayla">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                onclick="updateStudentStatus({{ $student->id }}, 'rejected')"
-                                                title="Reddet">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
-                                    <div class="text-muted">Henüz öğrenci bulunmuyor</div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+<div class="students-shell">
+    <div class="students-card students-filter">
+        <form method="GET" action="{{ route('admin.students') }}" class="row g-3 align-items-end">
+            <div class="col-lg-3 col-md-4">
+                <label for="status" class="form-label small text-muted fw-semibold">Kayıt Durumu</label>
+                <div class="input-wrap">
+                    <i class="fas fa-filter"></i>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Tümü</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Beklemede</option>
+                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Onaylandı</option>
+                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Reddedildi</option>
+                    </select>
                 </div>
             </div>
-            
-            @if($students->hasPages())
-            <div class="card-footer">
-                {{ $students->links() }}
+            <div class="col-lg-6 col-md-8">
+                <label for="search" class="form-label small text-muted fw-semibold">Arama</label>
+                <div class="input-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}" placeholder="Ad, soyad veya T.C. kimlik...">
+                </div>
             </div>
-            @endif
+            <div class="col-lg-3 col-md-12 d-flex gap-2 justify-content-lg-end">
+                <button type="submit" class="btn btn-primary rounded-3 px-3">
+                    <i class="fas fa-search me-1"></i>Filtrele
+                </button>
+                <a href="{{ route('admin.students') }}" class="btn btn-outline-secondary rounded-3 px-3">
+                    <i class="fas fa-times me-1"></i>Temizle
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="students-card overflow-hidden">
+        <div class="students-header">
+            <h5 class="mb-0 fw-semibold"><i class="fas fa-user-graduate me-2 text-muted"></i>Öğrenci Listesi</h5>
+            <span class="badge text-bg-primary count-pill">{{ $students->total() }} öğrenci</span>
         </div>
+        <div class="table-responsive">
+            <table class="table table-students">
+                <thead>
+                    <tr>
+                        <th>Öğrenci Bilgileri</th>
+                        <th>Veli Bilgileri</th>
+                        <th>Acil Durum İletişim</th>
+                        <th>Durum</th>
+                        <th>Tarih</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($students as $student)
+                    <tr>
+                        <td data-bs-toggle="modal" data-bs-target="#studentModal{{ $student->id }}" style="cursor:pointer;">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold text-dark">{{ $student->full_name }}</div>
+                                    <div class="small text-muted">
+                                        <i class="fas fa-id-card me-1"></i>{{ $student->tc_identity }}
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="fas fa-birthday-cake me-1"></i>{{ $student->birth_date->format('d.m.Y') }} ({{ $student->age }} yaş)
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark">{{ $student->parent_full_name }}</div>
+                            <div class="small text-muted">
+                                <i class="fas fa-phone me-1"></i>{{ $student->parent_phone }}
+                            </div>
+                            @if($student->parent_email)
+                            <div class="small text-muted">
+                                <i class="fas fa-envelope me-1"></i>{{ $student->parent_email }}
+                            </div>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark">{{ $student->emergency_contact_name }}</div>
+                            <div class="small text-muted">
+                                <i class="fas fa-phone me-1"></i>{{ $student->emergency_contact_phone }}
+                            </div>
+                            @if($student->emergency_contact_relation)
+                            <div class="small text-muted">
+                                <i class="fas fa-user-friends me-1"></i>{{ $student->emergency_contact_relation }}
+                            </div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($student->registration_status == 'pending')
+                                <span class="badge-soft-pill text-warning-emphasis bg-warning-subtle border border-warning-subtle">
+                                    <i class="fas fa-clock me-1"></i>Beklemede
+                                </span>
+                            @elseif($student->registration_status == 'approved')
+                                <span class="badge-soft-pill text-success-emphasis bg-success-subtle border border-success-subtle">
+                                    <i class="fas fa-check me-1"></i>Onaylandı
+                                </span>
+                            @else
+                                <span class="badge-soft-pill text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                                    <i class="fas fa-times me-1"></i>Reddedildi
+                                </span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="small text-dark">{{ $student->created_at->format('d.m.Y') }}</div>
+                            <div class="small text-muted">{{ $student->created_at->format('H:i') }}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-primary action-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#studentModal{{ $student->id }}"
+                                    title="Detayları Görüntüle"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                @if($student->registration_status == 'pending')
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-success action-btn"
+                                    onclick="updateStudentStatus({{ $student->id }}, 'approved')"
+                                    title="Onayla"
+                                >
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger action-btn"
+                                    onclick="updateStudentStatus({{ $student->id }}, 'rejected')"
+                                    title="Reddet"
+                                >
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="border-0">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <div class="fw-semibold text-dark">No students found</div>
+                                <div class="small mt-1">Filtreleri değiştirerek tekrar deneyin veya yeni öğrenci kaydı bekleyin.</div>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($students->hasPages())
+        <div class="px-3 py-3 border-top">
+            {{ $students->links() }}
+        </div>
+        @endif
     </div>
 </div>
 
