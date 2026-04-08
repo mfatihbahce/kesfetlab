@@ -31,7 +31,7 @@ Route::prefix('admin')->group(function () {
     // Admin özel login route'u
     Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
     
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'admin.only'])->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
         Route::get('/students/{id}', [AdminController::class, 'studentDetail'])->name('admin.students.detail');

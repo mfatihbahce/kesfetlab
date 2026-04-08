@@ -174,5 +174,21 @@
             <button type="submit" class="btn">Giris Yap</button>
         </form>
     </div>
+<script>
+    document.addEventListener('submit', function (event) {
+        const form = event.target;
+        if (!(form instanceof HTMLFormElement)) return;
+        if (form.dataset.submitting === '1') {
+            event.preventDefault();
+            return;
+        }
+        form.dataset.submitting = '1';
+        const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+        submitButtons.forEach((btn) => {
+            btn.disabled = true;
+            btn.classList.add('disabled');
+        });
+    }, true);
+</script>
 </body>
 </html>

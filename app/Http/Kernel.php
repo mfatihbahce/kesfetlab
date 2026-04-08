@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'simple.token.auth' => \App\Http\Middleware\SimpleTokenAuth::class,
         'api.auth' => \App\Http\Middleware\ApiAuthMiddleware::class,
         'parent.api.auth' => \App\Http\Middleware\ParentApiAuthMiddleware::class,
+        'admin.only' => \App\Http\Middleware\EnsureAdminRole::class,
     ];
 }

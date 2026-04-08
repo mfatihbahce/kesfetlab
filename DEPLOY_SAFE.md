@@ -1,4 +1,7 @@
 # Deploy Safe Guide (Production)
+cd /var/www/vhosts/kayit.kesfetlab.com/httpdocs
+
+
 
 Bu dokuman, canli ortamda veri kaybi olmadan guncelleme yapmak icin zorunlu adimlari icerir.
 
