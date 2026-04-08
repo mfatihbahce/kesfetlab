@@ -13,6 +13,7 @@ use App\Models\AppSetting;
 use App\Models\ParentUser;
 use App\Models\ParentStudent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -1305,5 +1306,49 @@ class AdminController extends Controller
 
         return redirect()->route('admin.settings')
             ->with('success', 'Ayarlar basariyla guncellendi.');
+    }
+
+    /**
+     * Admin ve ayarlar disindaki tum verileri sifirla.
+     */
+    public function resetData(Request $request)
+    {
+        $request->validate([
+            'confirm_text' => 'required|in:SIFIRLA',
+        ], [
+            'confirm_text.required' => 'Onay metni zorunludur.',
+            'confirm_text.in' => 'Veri sifirlama icin kutuya SIFIRLA yazmalisiniz.',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            // Egitim ve kayit akisina ait tum veriler temizlenir.
+            DB::table('group_attendances')->truncate();
+            DB::table('attendances')->truncate();
+            DB::table('notifications')->truncate();
+            DB::table('enrollments')->truncate();
+            DB::table('groups')->truncate();
+            DB::table('workshops')->truncate();
+            DB::table('parent_students')->truncate();
+            DB::table('students')->truncate();
+            DB::table('parent_users')->truncate();
+
+            // Sadece admin harici kullanicilar temizlenir.
+            DB::table('users')->where('role', '!=', 'admin')->delete();
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            DB::commit();
+
+            return redirect()->route('admin.settings')
+                ->with('success', 'Veriler sifirlandi. Admin kullanicilari ve sistem ayarlari korundu.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            return redirect()->route('admin.settings')
+                ->with('error', 'Veri sifirlama sirasinda hata olustu: ' . $e->getMessage());
+        }
     }
 }

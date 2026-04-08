@@ -80,6 +80,7 @@ Route::prefix('admin')->group(function () {
         // Sistem ayarlari
         Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
         Route::put('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
+        Route::post('/settings/reset-data', [AdminController::class, 'resetData'])->name('admin.settings.reset-data');
     });
 });
 

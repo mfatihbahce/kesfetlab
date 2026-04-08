@@ -15,6 +15,9 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
                 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -53,6 +56,37 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save me-2"></i>
                         Ayarlari Kaydet
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-card mt-4 border border-danger-subtle">
+            <div class="table-header" style="background: linear-gradient(120deg, #7f1d1d 0%, #b91c1c 100%);">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                Tehlikeli Islem - Verileri Sifirla
+            </div>
+            <div class="p-4">
+                <p class="mb-2 text-danger fw-semibold">Bu islem geri alinamaz.</p>
+                <p class="text-muted small mb-3">
+                    Admin kullanicilari ve marka ayarlari korunur. Ogrenciler, veliler, siniflar, gruplar, kayitlar,
+                    yoklamalar ve bildirimler temizlenir.
+                </p>
+
+                <form action="{{ route('admin.settings.reset-data') }}" method="POST" onsubmit="return confirm('Tum verileri sifirlamak istediginize emin misiniz? Bu islem geri alinamaz.');">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="confirm_text" class="form-label">
+                            Onay icin <strong>SIFIRLA</strong> yazin
+                        </label>
+                        <input type="text" id="confirm_text" name="confirm_text" class="form-control @error('confirm_text') is-invalid @enderror" placeholder="SIFIRLA" required>
+                        @error('confirm_text')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>
+                        Verileri Sifirla
                     </button>
                 </form>
             </div>
