@@ -13,12 +13,10 @@ class Workshop extends Model
         'name',
         'description',
         'capacity',
-        'price',
         'status',
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
         'capacity' => 'integer',
     ];
 

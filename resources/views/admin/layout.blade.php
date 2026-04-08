@@ -354,6 +354,13 @@
                     Gruplar
                 </a>
             </div>
+
+            <div class="nav-item">
+                <a href="{{ route('admin.calendar') }}" class="nav-link {{ request()->routeIs('admin.calendar*') ? 'active' : '' }}">
+                    <i class="fas fa-calendar-alt"></i>
+                    Takvim
+                </a>
+            </div>
             
             <div class="nav-item">
                 <a href="{{ route('admin.instructors') }}" class="nav-link {{ request()->routeIs('admin.instructors*') ? 'active' : '' }}">
@@ -365,7 +372,7 @@
             <div class="nav-item">
                 <a href="{{ route('admin.enrollments') }}" class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}">
                     <i class="fas fa-clipboard-list"></i>
-                    Kayıtlar
+                    Öğrenciler
                 </a>
             </div>
             

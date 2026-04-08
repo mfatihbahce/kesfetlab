@@ -96,6 +96,7 @@ class Enrollment extends Model
             'approved' => 'Onaylandı',
             'rejected' => 'Reddedildi',
             'cancelled' => 'İptal Edildi',
+            'graduated' => 'Mezun',
         ];
 
         return $statuses[$this->status] ?? $this->status;

@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'Kayıt Yönetimi - Keşfet LAB')
-@section('page-title', 'Kayıt Yönetimi')
+@section('title', 'Öğrenci Yönetimi - Keşfet LAB')
+@section('page-title', 'Öğrenci Yönetimi')
 
 @section('content')
 <div class="row">
@@ -18,6 +18,7 @@
                             <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Onaylandı</option>
                             <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Reddedildi</option>
                             <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>İptal Edildi</option>
+                            <option value="graduated" {{ request('status') == 'graduated' ? 'selected' : '' }}>Mezun</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -50,7 +51,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     <i class="fas fa-clipboard-list me-2"></i>
-                    Kayıt Listesi
+                    Öğrenci Kayıt Listesi
                 </h5>
                 <span class="badge bg-primary fs-6">{{ $enrollments->total() }} kayıt</span>
             </div>
@@ -63,7 +64,6 @@
                                 <th style="width: 25%;">Sınıf & Grup</th>
                                 <th style="width: 10%;">Kayıt Durumu</th>
                                 <th style="width: 10%;">Ödeme Durumu</th>
-                                <th style="width: 10%;">Tutar</th>
                                 <th style="width: 10%;">Tarih</th>
                                 <th style="width: 10%;">İşlemler</th>
                             </tr>
@@ -142,24 +142,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="fw-bold">{{ number_format($enrollment->amount, 2) }} ₺</div>
-                                    @if($enrollment->payment_date)
-                                    <div class="text-muted small">
-                                        {{ $enrollment->payment_date->format('d.m.Y') }}
-                                    </div>
-                                    @endif
-                                </td>
-                                <td>
                                     <div>{{ $enrollment->enrollment_date->format('d.m.Y') }}</div>
                                     <div class="text-muted small">{{ $enrollment->created_at->format('H:i') }}</div>
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                data-bs-toggle="modal" data-bs-target="#enrollmentModal{{ $enrollment->id }}"
-                                                title="Detayları Görüntüle">
+                                        <a href="{{ route('admin.students.detail', $enrollment->student->id) }}" class="btn btn-sm btn-outline-primary" title="Öğrenci Detayı">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
                                         
                                         @if($enrollment->status == 'pending')
                                         <button type="button" class="btn btn-sm btn-outline-info" 
@@ -191,7 +181,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center py-5">
+                                <td colspan="6" class="text-center py-5">
                                     <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
                                     <div class="text-muted">Henüz kayıt bulunmuyor</div>
                                 </td>
@@ -247,7 +237,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        <div class="form-text">Sadece aynı sınıfdeki gruplar gösterilmektedir.</div>
+                        <div class="form-text">Sadece aynı sınıftaki gruplar gösterilmektedir.</div>
                     </div>
                 </form>
             </div>
@@ -256,87 +246,6 @@
                 <button type="button" class="btn btn-primary" onclick="assignGroup({{ $enrollment->id }})">
                     <i class="fas fa-users me-1"></i>Grup Ata
                 </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="enrollmentModal{{ $enrollment->id }}" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-clipboard-list me-2"></i>
-                    Kayıt Detayları
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="border-bottom pb-2">
-                            <i class="fas fa-user-graduate me-2"></i>Öğrenci Bilgileri
-                        </h6>
-                        <table class="table table-sm">
-                            <tr><td><strong>Ad Soyad:</strong></td><td>{{ $enrollment->student->full_name }}</td></tr>
-                            <tr><td><strong>T.C. Kimlik:</strong></td><td>{{ $enrollment->student->tc_identity }}</td></tr>
-                            <tr><td><strong>Yaş:</strong></td><td>{{ $enrollment->student->age }}</td></tr>
-                            <tr><td><strong>Veli:</strong></td><td>{{ $enrollment->student->parent_full_name }}</td></tr>
-                            <tr><td><strong>Telefon:</strong></td><td>{{ $enrollment->student->parent_phone }}</td></tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="border-bottom pb-2">
-                            <i class="fas fa-flask me-2"></i>Sınıf Bilgileri
-                        </h6>
-                        <table class="table table-sm">
-                            <tr><td><strong>Sınıf:</strong></td><td>{{ $enrollment->workshop->name }}</td></tr>
-                            @if($enrollment->group)
-                            <tr><td><strong>Grup:</strong></td><td>{{ $enrollment->group->name }}</td></tr>
-                            <tr><td><strong>Eğitmen:</strong></td><td>{{ $enrollment->group->instructor->name ?? 'Atanmamış' }}</td></tr>
-                            <tr><td><strong>Program:</strong></td><td>{{ $enrollment->group->schedule }}</td></tr>
-                            @else
-                            <tr><td><strong>Grup:</strong></td><td class="text-warning">Atanmamış</td></tr>
-                            @endif
-                        </table>
-                    </div>
-                </div>
-                
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <h6 class="border-bottom pb-2">
-                            <i class="fas fa-credit-card me-2"></i>Ödeme Bilgileri
-                        </h6>
-                        <table class="table table-sm">
-                            <tr><td><strong>Tutar:</strong></td><td>{{ number_format($enrollment->amount, 2) }} ₺</td></tr>
-                            <tr><td><strong>Ödeme Durumu:</strong></td><td>{{ $enrollment->payment_status_text }}</td></tr>
-                            @if($enrollment->payment_date)
-                            <tr><td><strong>Ödeme Tarihi:</strong></td><td>{{ $enrollment->payment_date->format('d.m.Y') }}</td></tr>
-                            @endif
-                            @if($enrollment->payment_notes)
-                            <tr><td><strong>Notlar:</strong></td><td>{{ $enrollment->payment_notes }}</td></tr>
-                            @endif
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="border-bottom pb-2">
-                            <i class="fas fa-calendar me-2"></i>Kayıt Bilgileri
-                        </h6>
-                        <table class="table table-sm">
-                            <tr><td><strong>Kayıt Tarihi:</strong></td><td>{{ $enrollment->enrollment_date->format('d.m.Y') }}</td></tr>
-                            <tr><td><strong>Başlangıç:</strong></td><td>{{ $enrollment->start_date->format('d.m.Y') }}</td></tr>
-                            @if($enrollment->end_date)
-                            <tr><td><strong>Bitiş:</strong></td><td>{{ $enrollment->end_date->format('d.m.Y') }}</td></tr>
-                            @endif
-                            <tr><td><strong>Durum:</strong></td><td>{{ $enrollment->status_text }}</td></tr>
-                            @if($enrollment->notes)
-                            <tr><td><strong>Notlar:</strong></td><td>{{ $enrollment->notes }}</td></tr>
-                            @endif
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             </div>
         </div>
     </div>

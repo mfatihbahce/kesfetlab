@@ -123,6 +123,13 @@ document.addEventListener('DOMContentLoaded', function() {
         locale: 'tr',
         height: 600,
         events: @json($events),
+        buttonText: {
+            today: 'Bugün',
+            month: 'Ay',
+            week: 'Hafta',
+            day: 'Gün'
+        },
+        noEventsContent: 'Bu tarih aralığında ders bulunmuyor',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',

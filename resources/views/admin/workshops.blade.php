@@ -63,10 +63,6 @@
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    <strong>Fiyat:</strong> {{ number_format($workshop->price, 2) }} ₺
-                </div>
-                
                 <div class="d-flex gap-2">
                     <button type="button" class="btn btn-sm btn-outline-primary flex-fill" 
                             data-bs-toggle="modal" data-bs-target="#editWorkshopModal{{ $workshop->id }}">
@@ -109,21 +105,10 @@
                                       name="description" rows="3">{{ $workshop->description }}</textarea>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="capacity{{ $workshop->id }}" class="form-label">Kontenjan</label>
-                                    <input type="number" class="form-control" id="capacity{{ $workshop->id }}" 
-                                           name="capacity" value="{{ $workshop->capacity }}" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="price{{ $workshop->id }}" class="form-label">Fiyat (₺)</label>
-                                    <input type="number" step="0.01" class="form-control" id="price{{ $workshop->id }}" 
-                                           name="price" value="{{ $workshop->price }}" required>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="capacity{{ $workshop->id }}" class="form-label">Kontenjan</label>
+                            <input type="number" class="form-control" id="capacity{{ $workshop->id }}" 
+                                   name="capacity" value="{{ $workshop->capacity }}" required>
                         </div>
                         
                         <div class="mb-3">
@@ -179,19 +164,9 @@
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="capacity" class="form-label">Kontenjan</label>
-                                <input type="number" class="form-control" id="capacity" name="capacity" value="20" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="price" class="form-label">Fiyat (₺)</label>
-                                <input type="number" step="0.01" class="form-control" id="price" name="price" value="0" required>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="capacity" class="form-label">Kontenjan</label>
+                        <input type="number" class="form-control" id="capacity" name="capacity" value="20" required>
                     </div>
                     
                     <div class="mb-3">

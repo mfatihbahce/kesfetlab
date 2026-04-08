@@ -16,8 +16,12 @@ class Group extends Model
         'capacity',
         'current_enrollment',
         'day_of_week',
+        'day_of_weeks',
+        'day_schedules',
         'start_time',
         'end_time',
+        'group_start_date',
+        'group_end_date',
         'status',
         'description',
     ];
@@ -25,6 +29,10 @@ class Group extends Model
     protected $casts = [
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
+        'day_of_weeks' => 'array',
+        'day_schedules' => 'array',
+        'group_start_date' => 'date',
+        'group_end_date' => 'date',
         'capacity' => 'integer',
         'current_enrollment' => 'integer',
     ];
@@ -94,10 +102,28 @@ class Group extends Model
             'saturday' => 'Cumartesi',
             'sunday' => 'Pazar',
         ];
+        $selectedDays = $this->day_of_weeks;
+        if (empty($selectedDays) && !empty($this->day_of_week)) {
+            $selectedDays = [$this->day_of_week];
+        }
 
-        return $days[$this->day_of_week] . ' ' . 
-               $this->start_time->format('H:i') . ' - ' . 
-               $this->end_time->format('H:i');
+        $scheduleMap = $this->day_schedules ?? [];
+        $timePart = collect($selectedDays ?? [])
+            ->map(function ($day) use ($days, $scheduleMap) {
+                $label = $days[$day] ?? $day;
+                $slot = $scheduleMap[$day] ?? null;
+                if (is_array($slot) && !empty($slot['start']) && !empty($slot['end'])) {
+                    return $label . ' ' . $slot['start'] . '-' . $slot['end'];
+                }
+                return $label;
+            })
+            ->implode(', ');
+
+        if ($this->group_start_date && $this->group_end_date) {
+            return $timePart . ' | ' . $this->group_start_date->format('d.m.Y') . ' - ' . $this->group_end_date->format('d.m.Y');
+        }
+
+        return $timePart;
     }
 
     // Metodlar

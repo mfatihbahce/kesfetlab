@@ -34,6 +34,7 @@ Route::prefix('admin')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
+        Route::get('/students/{id}', [AdminController::class, 'studentDetail'])->name('admin.students.detail');
         Route::put('/students/{id}/status', [AdminController::class, 'updateStudentStatus'])->name('admin.students.status');
         
         // Sınıf yönetimi
@@ -44,8 +45,13 @@ Route::prefix('admin')->group(function () {
         
         // Grup yönetimi
         Route::get('/groups', [AdminController::class, 'groups'])->name('admin.groups');
+        Route::get('/groups/create', [AdminController::class, 'createGroup'])->name('admin.groups.create');
+        Route::get('/groups/{id}/edit', [AdminController::class, 'editGroup'])->name('admin.groups.edit');
+        Route::post('/groups/conflicts', [AdminController::class, 'checkGroupConflicts'])->name('admin.groups.conflicts');
         Route::get('/groups/{id}', [AdminController::class, 'groupDetail'])->name('admin.groups.detail');
         Route::post('/groups/{id}/announcements', [AdminController::class, 'storeGroupAnnouncement'])->name('admin.groups.announcements.store');
+        Route::get('/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+        Route::get('/calendar/events', [AdminController::class, 'calendarEvents'])->name('admin.calendar.events');
         
         // Eğitmen yönetimi
         Route::get('/instructors', [AdminController::class, 'instructors'])->name('admin.instructors');

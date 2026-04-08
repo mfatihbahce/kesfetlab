@@ -73,7 +73,7 @@ class FormController extends Controller
                     'status' => 'pending',
                     'enrollment_date' => now(),
                     'start_date' => now(),
-                    'amount' => $workshop->price,
+                    'amount' => 0,
                     'payment_status' => 'pending',
                     'is_active' => true,
                 ]);
