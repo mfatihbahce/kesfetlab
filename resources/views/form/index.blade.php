@@ -173,8 +173,8 @@
                                 @error('emergency_contact_relation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="school_name" class="form-label">Şu An Okuduğu Okul Adı</label>
-                                <input type="text" class="form-control @error('school_name') is-invalid @enderror" id="school_name" name="school_name" value="{{ old('school_name') }}">
+                                <label for="school_name" class="form-label">Şuan Okuduğu Okul Adı <span class="required">*</span></label>
+                                <input type="text" class="form-control @error('school_name') is-invalid @enderror" id="school_name" name="school_name" value="{{ old('school_name') }}" required>
                                 @error('school_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-12">
@@ -200,7 +200,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="parent_phone" class="form-label">Telefon Numarası <span class="required">*</span></label>
-                                <input type="tel" class="form-control @error('parent_phone') is-invalid @enderror" id="parent_phone" name="parent_phone" value="{{ old('parent_phone') }}" required>
+                                <input type="tel" class="form-control @error('parent_phone') is-invalid @enderror" id="parent_phone" name="parent_phone" value="{{ old('parent_phone') }}" maxlength="11" pattern="0[0-9]{10}" required>
                                 @error('parent_phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
@@ -226,7 +226,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="emergency_contact_phone" class="form-label">Telefon Numarası <span class="required">*</span></label>
-                                <input type="tel" class="form-control @error('emergency_contact_phone') is-invalid @enderror" id="emergency_contact_phone" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" required>
+                                <input type="tel" class="form-control @error('emergency_contact_phone') is-invalid @enderror" id="emergency_contact_phone" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" maxlength="11" pattern="0[0-9]{10}" required>
                                 @error('emergency_contact_phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -272,12 +272,37 @@
         document.getElementById('tc_identity').addEventListener('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
-        document.getElementById('parent_phone').addEventListener('input', function () {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-        document.getElementById('emergency_contact_phone').addEventListener('input', function () {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
+        function bindPhoneValidation(id) {
+            const input = document.getElementById(id);
+            if (!input) return;
+
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
+                this.setCustomValidity('');
+            });
+
+            input.addEventListener('blur', function () {
+                let digits = this.value.replace(/[^0-9]/g, '');
+
+                // Kullanici 10 hane ve basinda 0 olmadan girdiyse otomatik tamamla.
+                if (digits.length === 10 && !digits.startsWith('0')) {
+                    digits = '0' + digits;
+                }
+
+                this.value = digits;
+
+                if (digits.startsWith('0') && digits.length !== 11) {
+                    this.setCustomValidity('Telefon numarası 0 ile başlıyorsa 11 haneye tamamlanmalıdır.');
+                } else if (digits.length > 0 && !/^0\d{10}$/.test(digits)) {
+                    this.setCustomValidity('Telefon numarası 0 ile başlamalı ve 11 hane olmalıdır.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+
+        bindPhoneValidation('parent_phone');
+        bindPhoneValidation('emergency_contact_phone');
     </script>
 </body>
 </html>

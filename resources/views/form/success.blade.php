@@ -3,128 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keşfet LAB - Kayıt Başarılı</title>
+    <title>{{ $brandName ?? 'Kesfet LAB' }} - Kayıt Başarılı</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --brand-orange: #ff7a00;
+            --brand-yellow: #f5d100;
+            --brand-dark: #2f3138;
+            --brand-dark-soft: #464a55;
+        }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(245,209,0,.18), transparent 42%),
+                radial-gradient(circle at 88% 82%, rgba(255,122,0,.2), transparent 42%),
+                linear-gradient(140deg, var(--brand-dark), var(--brand-dark-soft));
+            margin: 0;
+            padding: 24px 0;
         }
         .success-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 600px;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 20px 45px rgba(0,0,0,.22);
+            max-width: 760px;
+            margin: 0 auto;
+            border: 1px solid rgba(255,122,0,.18);
+            overflow: hidden;
             text-align: center;
-            padding: 3rem;
+        }
+        .success-hero {
+            background: linear-gradient(120deg, var(--brand-orange), var(--brand-yellow));
+            color: #1f2937;
+            padding: 22px 20px;
+        }
+        .brand-logo {
+            max-width: 260px;
+            max-height: 88px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+        .success-content {
+            padding: 30px 26px 26px;
         }
         .success-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            width: 92px;
+            height: 92px;
+            background: linear-gradient(125deg, var(--brand-orange), var(--brand-yellow));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
-            color: white;
-            font-size: 3rem;
+            margin: 0 auto 1.4rem;
+            color: #2f3138;
+            font-size: 2.4rem;
+            box-shadow: 0 12px 26px rgba(255,122,0,.26);
         }
         .success-title {
-            color: #28a745;
-            font-size: 2rem;
+            color: #1f2937;
+            font-size: 2.05rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: .7rem;
         }
         .success-message {
-            color: #666;
-            font-size: 1.1rem;
+            color: #4b5563;
+            font-size: 1.05rem;
             line-height: 1.6;
-            margin-bottom: 2rem;
+            margin-bottom: 1.2rem;
         }
         .info-box {
-            background: #f8f9fa;
+            background: #fff8f1;
             border-radius: 15px;
             padding: 1.5rem;
-            margin: 2rem 0;
-            border-left: 4px solid #667eea;
+            margin: 1.3rem 0;
+            border: 1px solid rgba(255,122,0,.22);
+            text-align: left;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .info-box h5 {
+            color: #2f3138;
+            margin-bottom: .85rem;
+            font-weight: 700;
+        }
+        .info-box i {
+            color: #ff7a00;
+        }
+        .btn-brand {
+            background: linear-gradient(120deg, var(--brand-orange), var(--brand-yellow));
             border: none;
             padding: 12px 30px;
             border-radius: 25px;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
             display: inline-block;
+            color: #2f3138;
+            box-shadow: 0 10px 20px rgba(255,122,0,.25);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            color: white;
+        .btn-brand:hover {
+            filter: brightness(.97);
+            color: #2f3138;
         }
-        .contact-info {
-            background: #e3f2fd;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+        .trust-note {
+            color: #6b7280;
+            font-size: .9rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="success-container">
-            <div class="success-icon">
-                <i class="fas fa-check"></i>
+            <div class="success-hero">
+                @if(!empty($brandLogoPath))
+                    <img src="{{ asset(ltrim($brandLogoPath, '/')) }}" alt="{{ $brandName }}" class="brand-logo">
+                @else
+                    <h1 class="h3 mb-2 fw-bold">{{ $brandName ?? 'Kesfet LAB' }}</h1>
+                @endif
+                <p class="mb-0 fw-semibold">Öğrenci Kayıt Formu</p>
             </div>
-            
-            <h1 class="success-title">Kayıt Başarılı!</h1>
-            
-            <p class="success-message">
-                Öğrenci kayıt formunuz başarıyla alınmıştır. 
-                En kısa sürede size dönüş yapılacaktır.
-            </p>
 
-            @if(session('success'))
-                <div class="alert alert-success">
-                    <i class="fas fa-info-circle me-2"></i>
-                    {{ session('success') }}
+            <div class="success-content">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
                 </div>
-            @endif
+                
+                <h1 class="success-title">Kayıt Başarılı!</h1>
+                
+                <p class="success-message">
+                    Öğrenci kayıt formunuz başarıyla alınmıştır.
+                    En kısa sürede sizinle iletişime geçilecektir.
+                </p>
 
-            <div class="info-box">
-                <h5><i class="fas fa-clock me-2"></i>Sonraki Adımlar</h5>
-                <ul class="list-unstyled text-start">
-                    <li><i class="fas fa-arrow-right me-2 text-primary"></i>Kayıt formunuz incelenecek</li>
-                    <li><i class="fas fa-arrow-right me-2 text-primary"></i>Uygun grup ve ders programı belirlenecek</li>
-                    <li><i class="fas fa-arrow-right me-2 text-primary"></i>Size telefon veya e-posta ile bilgi verilecek</li>
-                    <li><i class="fas fa-arrow-right me-2 text-primary"></i>Kesin kayıt işlemleri tamamlanacak</li>
-                </ul>
-            </div>
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-            <div class="contact-info">
-                <h6><i class="fas fa-phone me-2"></i>İletişim Bilgileri</h6>
-                <p class="mb-1"><strong>Telefon:</strong> +90 (XXX) XXX XX XX</p>
-                <p class="mb-1"><strong>E-posta:</strong> info@kesfetlab.com</p>
-                <p class="mb-0"><strong>Adres:</strong> Keşfet LAB Eğitim Merkezi</p>
-            </div>
+                <div class="info-box">
+                    <h5><i class="fas fa-clock me-2"></i>Sonraki Adımlar</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-arrow-right me-2"></i>Kayıt formunuz incelenecek.</li>
+                        <li><i class="fas fa-arrow-right me-2"></i>Uygun grup ve ders programı belirlenecek.</li>
+                        <li><i class="fas fa-arrow-right me-2"></i>Telefon veya e-posta ile bilgi verilecek.</li>
+                        <li><i class="fas fa-arrow-right me-2"></i>Kesin kayıt işlemleri tamamlanacak.</li>
+                    </ul>
+                </div>
 
-            <div class="mt-4">
-                <a href="{{ route('form.index') }}" class="btn btn-primary">
-                    <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
-                </a>
-            </div>
+                <div class="mt-4">
+                    <a href="{{ route('form.index') }}" class="btn-brand">
+                        <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                    </a>
+                </div>
 
-            <div class="mt-4">
-                <small class="text-muted">
-                    <i class="fas fa-shield-alt me-1"></i>
-                    Kişisel verileriniz güvenle saklanmaktadır.
-                </small>
+                <div class="mt-4">
+                    <small class="trust-note">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Kişisel verileriniz güvenle saklanmaktadır.
+                    </small>
+                </div>
             </div>
         </div>
     </div>

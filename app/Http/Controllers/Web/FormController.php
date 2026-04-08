@@ -28,12 +28,27 @@ class FormController extends Controller
      */
     public function submit(Request $request)
     {
+        $request->merge([
+            'parent_phone' => $this->normalizePhoneForTr($request->input('parent_phone')),
+            'emergency_contact_phone' => $this->normalizePhoneForTr($request->input('emergency_contact_phone')),
+        ]);
+
         // Validation rules
         $rules = Student::rules();
         $rules['workshop_ids'] = 'required|array|min:1';
         $rules['workshop_ids.*'] = 'exists:workshops,id';
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make(
+            $request->all(),
+            $rules,
+            [
+                'school_name.required' => 'Şuan okuduğu okul adı alanı zorunludur.',
+                'parent_phone.required' => 'Veli telefon numarası zorunludur.',
+                'parent_phone.regex' => 'Veli telefon numarası 0 ile başlamalı ve 11 hane olmalıdır.',
+                'emergency_contact_phone.required' => 'Acil durum telefon numarası zorunludur.',
+                'emergency_contact_phone.regex' => 'Acil durum telefon numarası 0 ile başlamalı ve 11 hane olmalıdır.',
+            ]
+        );
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -81,5 +96,16 @@ class FormController extends Controller
     public function success()
     {
         return view('form.success');
+    }
+
+    private function normalizePhoneForTr($phone): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $phone);
+
+        if (strlen($digits) === 10 && !str_starts_with($digits, '0')) {
+            return '0' . $digits;
+        }
+
+        return $digits;
     }
 }

@@ -105,13 +105,13 @@ class Student extends Model
             'tc_identity' => 'required|string|size:11|unique:students,tc_identity',
             'birth_date' => 'required|date|before:today',
             'address' => 'required|string',
-            'school_name' => 'nullable|string|max:255',
+            'school_name' => 'required|string|max:255',
             'parent_first_name' => 'required|string|max:255',
             'parent_last_name' => 'required|string|max:255',
-            'parent_phone' => 'required|string|max:20',
+            'parent_phone' => ['required', 'regex:/^0\d{10}$/'],
             'parent_email' => 'nullable|email|max:255',
             'emergency_contact_name' => 'required|string|max:255',
-            'emergency_contact_phone' => 'required|string|max:20',
+            'emergency_contact_phone' => ['required', 'regex:/^0\d{10}$/'],
         ];
     }
 }
