@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Giris Yap | {{ $brandName ?? 'Kesfet LAB' }}</title>
+    <link rel="icon" href="{{ asset('favicon.jpg') }}" type="image/jpeg" sizes="any">
     <style>
         * { box-sizing: border-box; }
         :root {
